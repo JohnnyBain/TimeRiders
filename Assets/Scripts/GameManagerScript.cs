@@ -13,7 +13,7 @@ public class GameManagerScript : MonoBehaviour
 
     private GameObject gameBoardInstance;
 
-
+    //git push test
 
     RiderScript riderScript;
     // Start is called before the first frame update
