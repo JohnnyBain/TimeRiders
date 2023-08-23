@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 2108638796}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 4520854703993004528, guid: 8da5b95c46cff3749a08864618fa54b0, type: 3}
-  Rider: {fileID: 6195768096863760953, guid: 48b2e12bad795824ab517983aaddc93d, type: 3}
-  GameBoard: {fileID: 1507755248739912524, guid: 27485344649a49d4b9e1ebf07e7c6c77, type: 3}
+  RiderPrefab: {fileID: 6195768096863760953, guid: 48b2e12bad795824ab517983aaddc93d, type: 3}
+  GameBoardPrefab: {fileID: 1507755248739912524, guid: 27485344649a49d4b9e1ebf07e7c6c77, type: 3}
 --- !u!4 &2108638797
 Transform:
   m_ObjectHideFlags: 0

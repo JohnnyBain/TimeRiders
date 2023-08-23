@@ -4,25 +4,31 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
+    private List<GameObject> allRiders;
+    private GameObject rider;
 
     public GameObject MainCamera;
-    public GameObject Rider;
-    public GameObject GameBoard;
+    public GameObject RiderPrefab;
+    public GameObject GameBoardPrefab;
+
+    private GameObject gameBoardInstance;
+
 
 
     RiderScript riderScript;
     // Start is called before the first frame update
-    void Start()
+    void Awake ()
     {
-        GameObject camera = Instantiate(MainCamera, new Vector3(0,0,-10), transform.rotation) as GameObject;
-        GameObject rider = Instantiate(Rider, new Vector3(0, 0, 0), transform.rotation) as GameObject;
-        GameObject gameBoard = Instantiate(GameBoard, new Vector3(0, 0, 0), transform.rotation) as GameObject;
-        
-        
+        Debug.Log("GameManager Awake ----------");
+        GameObject camera = Instantiate(MainCamera, new Vector3(0,0,-10), transform.rotation);
+
+        allRiders = new List<GameObject>();
+        rider = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
+        allRiders.Add(rider);
+        Debug.Log(" ----------");
+        gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
         //Fetching all the relevant scripts that we are going to be using 
         riderScript = rider.GetComponent<RiderScript>();
-
-       
 
     }
 
@@ -37,6 +43,7 @@ public class GameManagerScript : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.RightArrow) == true)
         {
+            GameObject[,] tArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
             riderScript.SetDirection(Direction.Right);
             riderScript.UpdateRider(Direction.Right);
         }
@@ -60,5 +67,18 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-    
+    public List<GameObject> GetRiders() 
+    {
+        return allRiders;
+    }
+
+    public GameObject GetMainRider() 
+    {
+        return rider;
+    }
+
+    public GameObject GetGameBoard() 
+    {
+        return gameBoardInstance;
+    }
 }

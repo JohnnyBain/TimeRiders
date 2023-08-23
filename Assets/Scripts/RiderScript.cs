@@ -11,18 +11,17 @@ public enum Direction
 }
 public class RiderScript : MonoBehaviour
 {
-
-
-
-    private Direction direction;
+    GameManagerScript GMScript;
+    private Direction direction = Direction.None;
     private Direction previousDirection;
     public int stepSize;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        direction = Direction.None;
+        Debug.Log("Rider Awake ----------");
+        GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
     }
 
     // Update is called once per frame
@@ -33,30 +32,49 @@ public class RiderScript : MonoBehaviour
 
     private void moveRider(Direction direction)
     {
-        switch (direction)
+        if (ValidMoveCheck()) 
         {
-            case Direction.Right:
-                transform.position = transform.position + (new Vector3(1, 0, 0) * stepSize);
-                previousDirection = Direction.Right;
-                break;
-            case Direction.Left:
-                transform.position = transform.position + (new Vector3(-1, 0, 0) * stepSize);
-                previousDirection = Direction.Left;
-                break;
-            case Direction.Up:
-                transform.position = transform.position + (new Vector3(0, 1, 0) * stepSize);
-                previousDirection = Direction.Up;
-                break;
-            case Direction.Down:
-                transform.position = transform.position + (new Vector3(0, -1, 0) * stepSize);
-                previousDirection = Direction.Down;
-                break;
+            switch (direction)
+            {
+                case Direction.Right:
+                    transform.position = transform.position + (new Vector3(1, 0, 0) * stepSize);
+                    previousDirection = Direction.Right;
+                    break;
+                case Direction.Left:
+                    transform.position = transform.position + (new Vector3(-1, 0, 0) * stepSize);
+                    previousDirection = Direction.Left;
+                    break;
+                case Direction.Up:
+                    transform.position = transform.position + (new Vector3(0, 1, 0) * stepSize);
+                    previousDirection = Direction.Up;
+                    break;
+                case Direction.Down:
+                    transform.position = transform.position + (new Vector3(0, -1, 0) * stepSize);
+                    previousDirection = Direction.Down;
+                    break;
+            }
         }
+       
     }
 
     public void UpdateRider(Direction direction)
     {
+        GameObject[,] tArray = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameBoardScript>().GetTileArray();
+        Debug.Log("wawa");
         moveRider(direction);
+        GMScript.GetGameBoard().GetComponent<GameBoardScript>().CollisionCheck();
+    }
+
+    bool ValidMoveCheck() 
+    {
+        bool isValid = true;
+        
+
+
+
+
+
+        return isValid;
     }
 
     public Direction GetDirection()
