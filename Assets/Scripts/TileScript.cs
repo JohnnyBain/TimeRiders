@@ -5,13 +5,15 @@ using UnityEngine;
 public enum TileType
 {
     Road,
-    Wall
+    Wall,
+    Finish
 }
 
 public class TileScript : MonoBehaviour
 {
     public GameObject Road;
     public GameObject Wall;
+    public GameObject Finish;
     GameObject renderedTile;
 
     private TileType Ttype;
@@ -33,6 +35,10 @@ public class TileScript : MonoBehaviour
         else if (Ttype == TileType.Wall)
         {
             renderedTile = Instantiate(Wall, transform);
+        }
+        else if (Ttype == TileType.Finish)
+        {
+            renderedTile = Instantiate(Finish, transform);
         }
     }
 
@@ -59,6 +65,11 @@ public class TileScript : MonoBehaviour
     public void AddObject(GameObject obj) 
     {
         ObjectList.Add(obj);
+    }
+
+    public void RemoveObject(GameObject obj) //removed the first instance of the object parameter in the list
+    {
+        ObjectList.Remove(obj);
     }
 
     public List<GameObject> GetObjectList() 

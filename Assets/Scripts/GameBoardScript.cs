@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using System;
 
 public class GameBoardScript : MonoBehaviour
 {
@@ -14,9 +15,12 @@ public class GameBoardScript : MonoBehaviour
     private int BoardSize; //why is this public?
     private GameObject[,] TileArray;
 
+    HueColour hueColour;
+
     // Start is called before the first frame update
     void Awake()
     {
+        hueColour = new HueColour();
         Debug.Log("GameBoard Awake ----------");
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
         riderInstance = GMScript.GetMainRider();
@@ -55,22 +59,31 @@ public class GameBoardScript : MonoBehaviour
             string line = fileLines.ElementAt(i);
             for (int j = 0; j < BoardSize; j++)
             {
-                    GameObject obj;
-                    obj = (GameObject)Instantiate(TilePrefab, new Vector3(i, j, 0), Quaternion.identity);
+                GameObject tile;
+                tile = (GameObject)Instantiate(TilePrefab, new Vector3(i, j, 0), Quaternion.identity);
+
+                if (line[j] != 'x' && line[j] != '0')
+                {
+                    InitialiseSpecialTile(tile, line[j]);
+                }
+                else 
+                {
                     switch (line[j])
                     {
                         case 'x':
-                        obj.GetComponent<TileScript>().SetTileType(TileType.Wall);
-                        Debug.Log("Wall");
-                        break;
+                            tile.GetComponent<TileScript>().SetTileType(TileType.Wall);
+                            Debug.Log("Wall");
+                            break;
 
                         case '0':
-                        obj.GetComponent<TileScript>().SetTileType(TileType.Road);
-                        Debug.Log("Road");
-                        break;
+                            tile.GetComponent<TileScript>().SetTileType(TileType.Road);
+                            Debug.Log("Road");
+                            break;
+
                     }
-                    TileArray[i, j] = obj; 
-                    Debug.Log("creating tile");
+                    TileArray[i, j] = tile;
+                }
+                Debug.Log("creating tile");
             }
             
         }
@@ -78,13 +91,40 @@ public class GameBoardScript : MonoBehaviour
         TileArray[1,1].GetComponent<TileScript>().AddObject(GMScript.GetMainRider());
     }
 
-
+    /*
+     * [specialTile] - the object reference to the tile in question
+     * [c] - the char that represents the tile in the tile board text file 
+     */
+    private void InitialiseSpecialTile(GameObject specialTile, char c) // A method to deal with the initalisation of special tiles that are not roads or walls
+    {
+        if (char.IsLower(c)) //if the char is lower case it is one of the riders spawns
+        {
+            switch (c)
+            {
+                case 'a':
+                    specialTile.GetComponent<TileScript>().SetTileType(TileType.Road);
+                    Debug.Log("Finish");
+                    break;
+            }
+        }
+        else //if it is upper case it is one of the riders destinations
+        {
+            switch (c)
+            {
+                case 'A':
+                    specialTile.GetComponent<TileScript>().SetTileType(TileType.Finish);
+                    Debug.Log(HueColour.HueColourValue(HueColour.HueColorNames.Lime));
+                    Debug.Log("Finish");
+                    break;
+            }
+        }
+        
+       
+    }
     public void CollisionCheck() 
     {
         Debug.Log("Collision check");
         
-        bool result = false;
-
         for (int i = 0; i < BoardSize; i++) 
         {
             for (int j = 0; j < BoardSize; j++)
@@ -102,6 +142,7 @@ public class GameBoardScript : MonoBehaviour
                 }
             }
         }
+        
         //return result;
         
     }
