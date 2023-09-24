@@ -1563,7 +1563,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2108638797}
   - component: {fileID: 2108638796}
-  - component: {fileID: 2108638798}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -1594,9 +1593,9 @@ MonoBehaviour:
   - serializedVersion: 2
     rgba: 4285528576
   - serializedVersion: 2
-    rgba: 3572735
+    rgba: 4281762815
   - serializedVersion: 2
-    rgba: 15270115
+    rgba: 4293460195
 --- !u!4 &2108638797
 Transform:
   m_ObjectHideFlags: 0
@@ -1612,18 +1611,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2108638798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2108638795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96f07b44d88ca5648b2046ef587418f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2131509035
 GameObject:
   m_ObjectHideFlags: 0
