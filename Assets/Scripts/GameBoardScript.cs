@@ -92,29 +92,25 @@ public class GameBoardScript : MonoBehaviour
      */
     private void InitialiseSpecialTile(GameObject specialTile, char c) // A method to deal with the initalisation of special tiles that are not roads or walls
     {
-        if (char.IsLower(c)) //if the char is lower case it is one of the riders spawns
+        TileScript SpecialTileScript = specialTile.GetComponent<TileScript>();
+        if (char.IsLower(c)) //if the char is lower case it is one of the riders spawns (a = 97 in ascii)
         {
-            switch (c)
-            {
-                case 'a':
-                    specialTile.GetComponent<TileScript>().SetTileType(TileType.Spawn);
-                    specialTile.GetComponent<TileScript>().setColour(GMScript.GetColours().ElementAt(0));
-                    specialTile.transform.localScale = new Vector3((float)0.5, (float)0.5,1);
-                    //Debug.Log("Spawn");
-                    break;
-            }
+            int ID = (int)c - 97; //a is not 0 
+
+            SpecialTileScript.SetTileType(TileType.Spawn);
+            SpecialTileScript.setColour(GMScript.GetColours().ElementAt(ID));
+            specialTile.transform.localScale = new Vector3((float)0.5, (float)0.5,1);
+            //Debug.Log("Spawn");
+
         }
-        else //if it is upper case it is one of the riders destinations
+        else //if it is upper case it is one of the riders destinations (A = 65 in ascii)
         {
             RiderCount++;
-            switch (c)
-            {
-                case 'A':
-                    specialTile.GetComponent<TileScript>().SetTileType(TileType.Finish);
-                    specialTile.GetComponent<TileScript>().setColour(GMScript.GetColours().ElementAt(0));
-                    //Debug.Log("Finish");
-                    break;
-            }
+            int ID = (int)c - 65; //a is not 0
+            SpecialTileScript.SetTileType(TileType.Finish);
+            SpecialTileScript.setColour(GMScript.GetColours().ElementAt(ID));
+            //Debug.Log("Finish");
+            
         }
         
        

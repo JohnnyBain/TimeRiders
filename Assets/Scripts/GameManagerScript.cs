@@ -12,15 +12,34 @@ public class GameManagerScript : MonoBehaviour
     public GameObject GameBoardPrefab;
     public GameOverScreen GameOverScreen;
     public GameWinScreen GameWinScreen;
-    public List<Color32> Colours;
 
-    private List<GameObject> allRiders;
     private GameObject currentRiderInstance;
     private GameObject gameBoardInstance;
-    private int riderCount;
 
     private GameBoardScript gameBoardScript;
     private RiderScript riderScript;
+
+    public List<Color32> Colours;
+    private List<GameObject> allRiders;
+    private List<Direction>[] routes;
+    private int numbetOfRiders;
+    private int currentRider = 0;
+
+    
+
+
+    //after I've created the board I need to spawn the riders, this should look something like the following 
+    //
+    //for each tile 
+    //  if tile has a ID (if this tile is connected to a rider in some way (spawn/end) and is a spawn)
+    //      if tile ID == current rider
+    //          Spawn a playable rider
+    //      else
+    //          Spawn a replayRider(ID)
+    //
+    //
+
+
 
     // Start is called before the first frame update
     void Awake ()
@@ -30,6 +49,19 @@ public class GameManagerScript : MonoBehaviour
 
         CreateBoardInstance();// creates a board (each time a new ride begins the board is recreated)
 
+
+        currentRiderInstance = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
+        numbetOfRiders = gameBoardScript.GetRiderCount();
+
+        Debug.Log("rider count = " + numbetOfRiders);
+
+        riderScript = currentRiderInstance.GetComponent<RiderScript>();
+        riderScript.SetLocation(1, 1);
+        riderScript.SetColour(Colours.ElementAt(0));
+
+        allRiders = new List<GameObject>();
+        allRiders.Add(currentRiderInstance);
+        routes = new List<Direction>[numbetOfRiders]; //creating an array of lists to hold the routes of each rider
 
     }
 
@@ -43,18 +75,7 @@ public class GameManagerScript : MonoBehaviour
     private void CreateBoardInstance() 
     {
         gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
-        currentRiderInstance = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
-
         gameBoardScript = gameBoardInstance.GetComponent<GameBoardScript>();
-        riderCount = gameBoardScript.GetRiderCount();
-        Debug.Log("rider count = " + riderCount);
-
-        riderScript = currentRiderInstance.GetComponent<RiderScript>();
-        riderScript.SetLocation(1, 1);
-        riderScript.SetColour(Colours.ElementAt(0));
-
-        allRiders = new List<GameObject>();
-        allRiders.Add(currentRiderInstance);
     }
     public void GameTickUpdate() //A method that runs all the game computation that should be run on each turn the player makes (rider collision) 
     {
