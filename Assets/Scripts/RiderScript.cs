@@ -13,6 +13,9 @@ public class RiderScript : MonoBehaviour
 {
     GameManagerScript GMScript;
     TrailManagerScript TMScript;
+
+    GameObject TrailManager;
+    public GameObject TrailManagerPrefab;
     GameObject GameBoard;
     private Direction direction = Direction.None;
     private Direction previousDirection;
@@ -32,7 +35,9 @@ public class RiderScript : MonoBehaviour
     private void Start()
     {
         GameBoard = GMScript.GetGameBoard();
-        TMScript = gameObject.GetComponent<TrailManagerScript>(); //gameObject gets the object this script is attached to
+        TrailManager = Instantiate(TrailManagerPrefab,transform.position, transform.rotation);
+        TMScript = TrailManager.GetComponent<TrailManagerScript>();
+        TMScript.SetColour(colour); //sets the colour of the trail sprites
     }
     // Update is called once per frame
     void Update()
@@ -168,7 +173,7 @@ public class RiderScript : MonoBehaviour
     {
         colour = c;
         GetComponent<SpriteRenderer>().color = c; //sets the colour of the rider sprite
-        //TMScript.SetColour(c); //sets the colour of the trail sprites
+        
 
     }
 

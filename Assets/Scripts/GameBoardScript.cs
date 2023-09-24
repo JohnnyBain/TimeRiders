@@ -10,11 +10,13 @@ public class GameBoardScript : MonoBehaviour
     public GameObject RiderPrefab;
     public GameObject TilePrefab;
     
+
     GameManagerScript GMScript;
     private GameObject riderInstance;
-    private int BoardSize; //why is this public?
+    private int BoardSize;
+    private int RiderCount;
     private GameObject[,] TileArray;
-
+    
 
     // Start is called before the first frame update
     void Awake()

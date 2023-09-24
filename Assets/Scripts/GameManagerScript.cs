@@ -6,8 +6,8 @@ using System.Linq;
 public class GameManagerScript : MonoBehaviour
 {
     private List<GameObject> allRiders;
-    private GameObject rider; 
-
+    private GameObject rider;
+   
     public GameObject MainCamera;
     public GameObject RiderPrefab;
     public GameObject GameBoardPrefab;
@@ -25,14 +25,16 @@ public class GameManagerScript : MonoBehaviour
     void Awake ()
     {
         Debug.Log("GameManager Awake ----------");
-        GameObject camera = Instantiate(MainCamera, new Vector3(0,0,-10), transform.rotation);
+        GameObject camera = Instantiate(MainCamera, new Vector3(4,(float)4.5,-10), transform.rotation);
 
         allRiders = new List<GameObject>();
-        rider = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
         
+        rider = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
         rider.GetComponent<RiderScript>().SetColour(Colours.ElementAt(0));
 
-        
+
+
+
 
         allRiders.Add(rider);
         Debug.Log(" ----------");

@@ -56,10 +56,10 @@ public class TrailManagerScript : MonoBehaviour
     // addTrail is called to add an entity to the end of the line 
     private void addTrail()
     {
-        GameObject trail = Instantiate(Trail, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation); //create trail piece
-        //trail.GetComponent<SpriteRenderer>().color = colour;
+        GameObject trail = Instantiate(Trail, new Vector3(RiderScript.GetXLocation(), (int)RiderScript.GetYLocation(), 0), transform.rotation); //create trail piece
+        trail.GetComponent<SpriteRenderer>().color = colour;
         RiderTrail.Insert(0, trail); //add it to the start of the list
-        TileArray[(int)transform.position.x, (int)transform.position.y].GetComponent<TileScript>().AddObject(trail);
+        TileArray[(int)RiderScript.GetXLocation(), (int)RiderScript.GetYLocation()].GetComponent<TileScript>().AddObject(trail);
     }
 
     private void moveTrail()
@@ -67,8 +67,8 @@ public class TrailManagerScript : MonoBehaviour
         //move the first trail piece to the rider (saving a temp location)
         Vector3 temp = RiderTrail[0].transform.position; //storing the location of the first piece of trail
         TileArray[(int)RiderTrail[0].transform.position.x, (int)RiderTrail[0].transform.position.y].GetComponent<TileScript>().RemoveObject(RiderTrail[0]);//removing the trail from the old tile (the tile it is currently on but will soon be off)
-        RiderTrail[0].transform.position = transform.position; //move the trail to the rider
-        TileArray[(int)transform.position.x, (int)transform.position.y].GetComponent<TileScript>().AddObject(RiderTrail[0]);//adding the trail to the Tile
+        RiderTrail[0].transform.position = new Vector3((int)RiderScript.GetXLocation(), (int)RiderScript.GetYLocation(),0); //move the trail to the rider
+        TileArray[(int)RiderScript.GetXLocation(), (int)RiderScript.GetYLocation()].GetComponent<TileScript>().AddObject(RiderTrail[0]);//adding the trail to the Tile
 
         for (int i = 1; i < RiderTrail.Count; i++) //shift everyother piece of trail up to the next spot 
         {

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6195768096863760950}
   - component: {fileID: 6195768096863760949}
   - component: {fileID: -7868323183580374398}
-  - component: {fileID: 6350120614531279826}
   m_Layer: 0
   m_Name: RiderPrefab
   m_TagString: Untagged
@@ -137,19 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a8269414835f649b087922398bf13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TrailManagerPrefab: {fileID: 669338876355415096, guid: 726ece082366ec54cade99c8a5090d7d, type: 3}
   stepSize: 1
   trailLength: 5
---- !u!114 &6350120614531279826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6195768096863760953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a7332678c8b5ce43a041d32bb9e6724, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Trail: {fileID: 6195768096863760953, guid: 1d56396b2ba0afc4a9e646150689051a, type: 3}
-  RiderTrail: []
