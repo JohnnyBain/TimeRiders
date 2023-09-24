@@ -14,7 +14,7 @@ public class GameBoardScript : MonoBehaviour
     GameManagerScript GMScript;
     private GameObject riderInstance;
     private int BoardSize;
-    private int RiderCount;
+    private int RiderCount = 0;
     private GameObject[,] TileArray;
     
 
@@ -24,8 +24,7 @@ public class GameBoardScript : MonoBehaviour
 
         Debug.Log("GameBoard Awake ----------");
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
-        riderInstance = GMScript.GetMainRider();
-        
+        riderInstance = GMScript.GetCurrentRider();
         InitialiseBoard();
     }
 
@@ -65,29 +64,7 @@ public class GameBoardScript : MonoBehaviour
 
                 if (line[j] != 'x' && line[j] != '0')
                 {
-                    if (char.IsLower(line[j])) //if the char is lower case it is one of the riders spawns
-                    {
-                        switch (line[j])
-                        {
-                            case 'a':
-                                tile.GetComponent<TileScript>().SetTileType(TileType.Road);
-                                Debug.Log("Finish");
-                                break;
-                        }
-                    }
-                    else //if it is upper case it is one of the riders destinations
-                    {
-                        Debug.Log(line[j]);
-                        switch (line[j])
-                        {
-                            case 'A':
-                                tile.GetComponent<TileScript>().SetTileType(TileType.Finish);
-                                tile.GetComponent<TileScript>().setColour(GMScript.GetColours().ElementAt(0));  
-                                Debug.Log("Finish");
-                                break;
-                        }
-                    }
-                    //InitialiseSpecialTile(tile, line[j]);
+                    InitialiseSpecialTile(tile, line[j]);
                 }
                 else 
                 {
@@ -95,24 +72,18 @@ public class GameBoardScript : MonoBehaviour
                     {
                         case 'x':
                             tile.GetComponent<TileScript>().SetTileType(TileType.Wall);
-                            Debug.Log("Wall");
+                            //Debug.Log("Wall");
                             break;
 
                         case '0':
                             tile.GetComponent<TileScript>().SetTileType(TileType.Road);
-                            Debug.Log("Road");
+                            //Debug.Log("Road");
                             break;
-
                     }
-                    
                 }
                 TileArray[i, j] = tile;
-                Debug.Log("creating tile");
             }
-            
         }
-        
-        TileArray[1,1].GetComponent<TileScript>().AddObject(GMScript.GetMainRider());
     }
 
     /*
@@ -126,51 +97,36 @@ public class GameBoardScript : MonoBehaviour
             switch (c)
             {
                 case 'a':
-                    specialTile.GetComponent<TileScript>().SetTileType(TileType.Road);
-                    Debug.Log("Finish");
+                    specialTile.GetComponent<TileScript>().SetTileType(TileType.Spawn);
+                    specialTile.GetComponent<TileScript>().setColour(GMScript.GetColours().ElementAt(0));
+                    specialTile.transform.localScale = new Vector3((float)0.5, (float)0.5,1);
+                    //Debug.Log("Spawn");
                     break;
             }
         }
         else //if it is upper case it is one of the riders destinations
         {
+            RiderCount++;
             switch (c)
             {
                 case 'A':
                     specialTile.GetComponent<TileScript>().SetTileType(TileType.Finish);
-                    Debug.Log("Finish");
+                    specialTile.GetComponent<TileScript>().setColour(GMScript.GetColours().ElementAt(0));
+                    //Debug.Log("Finish");
                     break;
             }
         }
         
        
     }
-    public void CollisionCheck() 
-    {
-        Debug.Log("Collision check");
-        
-        for (int i = 0; i < BoardSize; i++) 
-        {
-            for (int j = 0; j < BoardSize; j++)
-            {
-                if (TileArray[i,j].GetComponent<TileScript>().GetObjectList().Contains(riderInstance))
-                {
-                    if (TileArray[i,j].GetComponent<TileScript>().GetTileType() == TileType.Road)
-                    {
-                        Debug.Log("Road");
-                    }
-                    else
-                    {
-                        Debug.Log("Wall");
-                    }
-                }
-            }
-        }
-        
-        //return result;
-        
-    }
+    
     public GameObject[,] GetTileArray() 
     {
         return TileArray;
+    }
+
+    public int GetRiderCount() 
+    {
+        return RiderCount;
     }
 }

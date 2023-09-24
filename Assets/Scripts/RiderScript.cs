@@ -14,9 +14,12 @@ public class RiderScript : MonoBehaviour
     GameManagerScript GMScript;
     TrailManagerScript TMScript;
 
-    GameObject TrailManager;
+    GameObject trailManagerInstance;
+    GameObject GameBoardInstance;
+
     public GameObject TrailManagerPrefab;
-    GameObject GameBoard;
+
+    List<TileType> ValidMoveTiles = new List<TileType> { TileType.Road, TileType.Spawn, TileType.Finish };
     private Direction direction = Direction.None;
     private Direction previousDirection;
     private Color32 colour;
@@ -34,10 +37,11 @@ public class RiderScript : MonoBehaviour
 
     private void Start()
     {
-        GameBoard = GMScript.GetGameBoard();
-        TrailManager = Instantiate(TrailManagerPrefab,transform.position, transform.rotation);
-        TMScript = TrailManager.GetComponent<TrailManagerScript>();
-        TMScript.SetColour(colour); //sets the colour of the trail sprites
+        GameBoardInstance = GMScript.GetGameBoard();
+        GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray()[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //add this rider object to the tile array where it is spawned
+        trailManagerInstance = Instantiate(TrailManagerPrefab, transform.position, transform.rotation);
+        TMScript = trailManagerInstance.GetComponent<TrailManagerScript>();
+        TMScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
     }
     // Update is called once per frame
     void Update()
@@ -47,7 +51,7 @@ public class RiderScript : MonoBehaviour
 
     private void moveRider(Direction direction)
     {
-        GameObject[,] TileArray = GameBoard.GetComponent<GameBoardScript>().GetTileArray();
+        GameObject[,] TileArray = GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
         if (ValidMoveCheck(direction)) 
         {
             switch (direction)
@@ -57,35 +61,35 @@ public class RiderScript : MonoBehaviour
                     transform.position = transform.position + (new Vector3(1, 0, 0) * stepSize);
                     previousDirection = Direction.Right;
                     xLocation++;
-                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetMainRider()); //adding the rider to the new tile
-                    TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().RemoveObject(GMScript.GetMainRider()); //removing the rider from the last tile
+                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetCurrentRider()); //adding the rider to the new tile
+                    TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().RemoveObject(GMScript.GetCurrentRider()); //removing the rider from the last tile
                     break;
                 case Direction.Left:
                     TMScript.manageTrail(Direction.Left);
                     transform.position = transform.position + (new Vector3(-1, 0, 0) * stepSize);
                     previousDirection = Direction.Left;
                     xLocation--;
-                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetMainRider());
-                    TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().RemoveObject(GMScript.GetMainRider());
+                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetCurrentRider());
+                    TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().RemoveObject(GMScript.GetCurrentRider());
                     break;
                 case Direction.Up:
                     TMScript.manageTrail(Direction.Up);
                     transform.position = transform.position + (new Vector3(0, 1, 0) * stepSize);
                     previousDirection = Direction.Up;
                     yLocation++;
-                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetMainRider());
-                    TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().RemoveObject(GMScript.GetMainRider());
+                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetCurrentRider());
+                    TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().RemoveObject(GMScript.GetCurrentRider());
                     break;
                 case Direction.Down:
                     TMScript.manageTrail(Direction.Down);
                     transform.position = transform.position + (new Vector3(0, -1, 0) * stepSize);
                     previousDirection = Direction.Down;
                     yLocation--;
-                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetMainRider());
-                    TileArray[xLocation, yLocation + 1].GetComponent<TileScript>().RemoveObject(GMScript.GetMainRider());
+                    TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(GMScript.GetCurrentRider());
+                    TileArray[xLocation, yLocation + 1].GetComponent<TileScript>().RemoveObject(GMScript.GetCurrentRider());
                     break;
             }
-            GMScript.GameTickUpdate();
+            
         }
        
     }
@@ -93,39 +97,37 @@ public class RiderScript : MonoBehaviour
     public void UpdateRider(Direction direction)
     {
         GameObject[,] tArray = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameBoardScript>().GetTileArray();
-        Debug.Log("wawa");
         moveRider(direction);
-        GMScript.GetGameBoard().GetComponent<GameBoardScript>().CollisionCheck();
-
+        GMScript.GameTickUpdate();
     }
 
     bool ValidMoveCheck(Direction direction) 
     {
         bool isValid = false;
-        GameObject[,] TileArray  =GameBoard.GetComponent<GameBoardScript>().GetTileArray();
+        GameObject[,] TileArray  = GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
         switch (direction)
         {
             case Direction.Right:
                 //if the tile to the right is a road isValid = true
-                if (TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().GetTileType() == TileType.Road || TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().GetTileType() == TileType.Finish) 
+                if (ValidMoveTiles.Contains(TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().GetTileType())) 
                 {
                     isValid = true;
                 }
                 break;
             case Direction.Left:
-                if (TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().GetTileType() == TileType.Road || TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().GetTileType() == TileType.Finish)
+                if (ValidMoveTiles.Contains(TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().GetTileType()))
                 {
                     isValid = true;
                 }
                 break;
             case Direction.Up:
-                if (TileArray[xLocation, yLocation + 1].GetComponent<TileScript>().GetTileType() == TileType.Road || TileArray[xLocation , yLocation + 1].GetComponent<TileScript>().GetTileType() == TileType.Finish)
+                if (ValidMoveTiles.Contains(TileArray[xLocation, yLocation + 1].GetComponent<TileScript>().GetTileType()))
                 {
                     isValid = true;
                 }
                 break;
             case Direction.Down:
-                if (TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().GetTileType() == TileType.Road || TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().GetTileType() == TileType.Finish)
+                if (ValidMoveTiles.Contains(TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().GetTileType()))
                 {
                     isValid = true;
                 }

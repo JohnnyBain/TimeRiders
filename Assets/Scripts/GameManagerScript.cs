@@ -5,9 +5,8 @@ using System.Linq;
 
 public class GameManagerScript : MonoBehaviour
 {
-    private List<GameObject> allRiders;
-    private GameObject rider;
    
+
     public GameObject MainCamera;
     public GameObject RiderPrefab;
     public GameObject GameBoardPrefab;
@@ -15,36 +14,23 @@ public class GameManagerScript : MonoBehaviour
     public GameWinScreen GameWinScreen;
     public List<Color32> Colours;
 
-
+    private List<GameObject> allRiders;
+    private GameObject currentRiderInstance;
     private GameObject gameBoardInstance;
+    private int riderCount;
 
-    //git push test
+    private GameBoardScript gameBoardScript;
+    private RiderScript riderScript;
 
-    RiderScript riderScript;
     // Start is called before the first frame update
     void Awake ()
     {
         Debug.Log("GameManager Awake ----------");
         GameObject camera = Instantiate(MainCamera, new Vector3(4,(float)4.5,-10), transform.rotation);
 
-        allRiders = new List<GameObject>();
-        
-        rider = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
-        rider.GetComponent<RiderScript>().SetColour(Colours.ElementAt(0));
+        CreateBoardInstance();// creates a board (each time a new ride begins the board is recreated)
 
 
-
-
-
-        allRiders.Add(rider);
-        Debug.Log(" ----------");
-        gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
-        //Fetching all the relevant scripts that we are going to be using 
-        riderScript = rider.GetComponent<RiderScript>();
-        riderScript.SetLocation(1,1);
-
-        
-        
     }
 
     // Update is called once per frame
@@ -53,6 +39,23 @@ public class GameManagerScript : MonoBehaviour
         inputCheck();
     }
 
+
+    private void CreateBoardInstance() 
+    {
+        gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
+        currentRiderInstance = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
+
+        gameBoardScript = gameBoardInstance.GetComponent<GameBoardScript>();
+        riderCount = gameBoardScript.GetRiderCount();
+        Debug.Log("rider count = " + riderCount);
+
+        riderScript = currentRiderInstance.GetComponent<RiderScript>();
+        riderScript.SetLocation(1, 1);
+        riderScript.SetColour(Colours.ElementAt(0));
+
+        allRiders = new List<GameObject>();
+        allRiders.Add(currentRiderInstance);
+    }
     public void GameTickUpdate() //A method that runs all the game computation that should be run on each turn the player makes (rider collision) 
     {
         Debug.Log("Game tick update");
@@ -118,9 +121,9 @@ public class GameManagerScript : MonoBehaviour
         return allRiders;
     }
 
-    public GameObject GetMainRider() 
+    public GameObject GetCurrentRider() 
     {
-        return rider;
+        return currentRiderInstance;
     }
 
     public GameObject GetGameBoard() 

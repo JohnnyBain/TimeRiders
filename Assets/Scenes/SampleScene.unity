@@ -1589,10 +1589,14 @@ MonoBehaviour:
   GameOverScreen: {fileID: 1319509350}
   GameWinScreen: {fileID: 1932263618}
   Colours:
-  - {r: 0.000533117, g: 7.5e-43, b: 0, a: 0}
-  - {r: 1.5836242e-38, g: 7.45e-43, b: 4.6e-44, a: 3.8491507e+9}
-  - {r: 0.000533117, g: 7.5e-43, b: 0.0005330499, a: 7.5e-43}
-  - {r: 1.5836287e-38, g: 7.45e-43, b: 6.9e-44, a: 6.4e-44}
+  - serializedVersion: 2
+    rgba: 4285137151
+  - serializedVersion: 2
+    rgba: 4285528576
+  - serializedVersion: 2
+    rgba: 3572735
+  - serializedVersion: 2
+    rgba: 15270115
 --- !u!4 &2108638797
 Transform:
   m_ObjectHideFlags: 0

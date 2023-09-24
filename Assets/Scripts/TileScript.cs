@@ -6,14 +6,17 @@ public enum TileType
 {
     Road,
     Wall,
+    Spawn,
     Finish
 }
 
 public class TileScript : MonoBehaviour
 {
-    public GameObject Road;
-    public GameObject Wall;
-    public GameObject Finish;
+
+    public GameObject RoadPrefab;
+    public GameObject WallPrefab;
+    public GameObject SpawnPrefab;
+    public GameObject FinishPrefab;
     private Color32 colour;
     GameObject renderedTile;
 
@@ -30,20 +33,25 @@ public class TileScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Tile Start ----------");
+        //Debug.Log("Tile Start ----------");
         if (Ttype == TileType.Road)
         {
-            renderedTile = Instantiate(Road, transform);
-            
+            renderedTile = Instantiate(RoadPrefab, transform);
+
         }
         else if (Ttype == TileType.Wall)
         {
-            renderedTile = Instantiate(Wall, transform);
+            renderedTile = Instantiate(WallPrefab, transform);
+        }
+        else if (Ttype == TileType.Spawn) 
+        {
+            renderedTile = Instantiate(SpawnPrefab, transform);
+            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render
         }
         else if (Ttype == TileType.Finish)
         {
-            renderedTile = Instantiate(Finish, transform);
-            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render to red
+            renderedTile = Instantiate(FinishPrefab, transform);
+            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render
         }
     }
 

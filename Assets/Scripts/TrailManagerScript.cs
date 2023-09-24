@@ -23,7 +23,7 @@ public class TrailManagerScript : MonoBehaviour
     void Start()
     {
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
-        RiderScript = GMScript.GetMainRider().GetComponent<RiderScript>();
+        RiderScript = GMScript.GetCurrentRider().GetComponent<RiderScript>();
         targetTrailLength = RiderScript.GetTrailLength();
         TileArray = GMScript.GetGameBoard().GetComponent<GameBoardScript>().GetTileArray();
     }
