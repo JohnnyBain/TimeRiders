@@ -26,4 +26,9 @@ public class TrailScript : MonoBehaviour
     {
         return YLocation;
     }
+
+    public void SetColour(Color32 c)
+    {
+        GetComponent<SpriteRenderer>().color = c;
+    }
 }

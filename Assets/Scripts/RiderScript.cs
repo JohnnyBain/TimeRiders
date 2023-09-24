@@ -16,6 +16,7 @@ public class RiderScript : MonoBehaviour
     GameObject GameBoard;
     private Direction direction = Direction.None;
     private Direction previousDirection;
+    private Color32 colour;
     public int stepSize;
     public int trailLength = 5;
     int xLocation;
@@ -162,5 +163,14 @@ public class RiderScript : MonoBehaviour
     {
         return trailLength;
     }
+
+    public void SetColour(Color32 c) 
+    {
+        colour = c;
+        GetComponent<SpriteRenderer>().color = c; //sets the colour of the rider sprite
+        //TMScript.SetColour(c); //sets the colour of the trail sprites
+
+    }
+
 
 }

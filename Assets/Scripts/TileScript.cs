@@ -14,7 +14,9 @@ public class TileScript : MonoBehaviour
     public GameObject Road;
     public GameObject Wall;
     public GameObject Finish;
+    private Color32 colour;
     GameObject renderedTile;
+
 
     private TileType Ttype;
     private List<GameObject> ObjectList;
@@ -23,6 +25,7 @@ public class TileScript : MonoBehaviour
     void Awake()
     {
         ObjectList = new List<GameObject>();
+        
     }
     // Start is called before the first frame update
     void Start()
@@ -31,6 +34,7 @@ public class TileScript : MonoBehaviour
         if (Ttype == TileType.Road)
         {
             renderedTile = Instantiate(Road, transform);
+            
         }
         else if (Ttype == TileType.Wall)
         {
@@ -39,6 +43,7 @@ public class TileScript : MonoBehaviour
         else if (Ttype == TileType.Finish)
         {
             renderedTile = Instantiate(Finish, transform);
+            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render to red
         }
     }
 
@@ -72,6 +77,10 @@ public class TileScript : MonoBehaviour
         ObjectList.Remove(obj);
     }
 
+    public void setColour(Color32 c) 
+    {
+        colour = c;
+    }
     public List<GameObject> GetObjectList() 
     {
         return ObjectList;

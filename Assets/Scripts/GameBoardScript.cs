@@ -15,12 +15,11 @@ public class GameBoardScript : MonoBehaviour
     private int BoardSize; //why is this public?
     private GameObject[,] TileArray;
 
-    HueColour hueColour;
 
     // Start is called before the first frame update
     void Awake()
     {
-        hueColour = new HueColour();
+
         Debug.Log("GameBoard Awake ----------");
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
         riderInstance = GMScript.GetMainRider();
@@ -64,7 +63,29 @@ public class GameBoardScript : MonoBehaviour
 
                 if (line[j] != 'x' && line[j] != '0')
                 {
-                    InitialiseSpecialTile(tile, line[j]);
+                    if (char.IsLower(line[j])) //if the char is lower case it is one of the riders spawns
+                    {
+                        switch (line[j])
+                        {
+                            case 'a':
+                                tile.GetComponent<TileScript>().SetTileType(TileType.Road);
+                                Debug.Log("Finish");
+                                break;
+                        }
+                    }
+                    else //if it is upper case it is one of the riders destinations
+                    {
+                        Debug.Log(line[j]);
+                        switch (line[j])
+                        {
+                            case 'A':
+                                tile.GetComponent<TileScript>().SetTileType(TileType.Finish);
+                                tile.GetComponent<TileScript>().setColour(GMScript.GetColours().ElementAt(0));  
+                                Debug.Log("Finish");
+                                break;
+                        }
+                    }
+                    //InitialiseSpecialTile(tile, line[j]);
                 }
                 else 
                 {
@@ -81,8 +102,9 @@ public class GameBoardScript : MonoBehaviour
                             break;
 
                     }
-                    TileArray[i, j] = tile;
+                    
                 }
+                TileArray[i, j] = tile;
                 Debug.Log("creating tile");
             }
             
@@ -113,7 +135,6 @@ public class GameBoardScript : MonoBehaviour
             {
                 case 'A':
                     specialTile.GetComponent<TileScript>().SetTileType(TileType.Finish);
-                    Debug.Log(HueColour.HueColourValue(HueColour.HueColorNames.Lime));
                     Debug.Log("Finish");
                     break;
             }

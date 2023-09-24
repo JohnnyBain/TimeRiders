@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManagerScript : MonoBehaviour
     public GameObject GameBoardPrefab;
     public GameOverScreen GameOverScreen;
     public GameWinScreen GameWinScreen;
+    public List<Color32> Colours;
+
 
     private GameObject gameBoardInstance;
 
@@ -27,6 +30,10 @@ public class GameManagerScript : MonoBehaviour
         allRiders = new List<GameObject>();
         rider = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
         
+        rider.GetComponent<RiderScript>().SetColour(Colours.ElementAt(0));
+
+        
+
         allRiders.Add(rider);
         Debug.Log(" ----------");
         gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
@@ -117,5 +124,10 @@ public class GameManagerScript : MonoBehaviour
     public GameObject GetGameBoard() 
     {
         return gameBoardInstance;
+    }
+
+    public List<Color32> GetColours() 
+    {
+        return Colours;
     }
 }
