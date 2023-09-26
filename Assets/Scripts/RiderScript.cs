@@ -20,6 +20,7 @@ public class RiderScript : MonoBehaviour
     public GameObject TrailManagerPrefab;
 
     List<TileType> ValidMoveTiles = new List<TileType> { TileType.Road, TileType.Spawn, TileType.Finish };
+    private List<Direction> route = new List<Direction>{ };
     private Direction direction = Direction.None;
     private Direction previousDirection;
     private Color32 colour;
@@ -42,6 +43,7 @@ public class RiderScript : MonoBehaviour
         trailManagerInstance = Instantiate(TrailManagerPrefab, transform.position, transform.rotation);
         TMScript = trailManagerInstance.GetComponent<TrailManagerScript>();
         TMScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
+        
     }
     // Update is called once per frame
     void Update()
@@ -54,6 +56,7 @@ public class RiderScript : MonoBehaviour
         GameObject[,] TileArray = GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
         if (ValidMoveCheck(direction)) 
         {
+            route.Add(direction);
             switch (direction)
             {
                 case Direction.Right:
@@ -175,9 +178,11 @@ public class RiderScript : MonoBehaviour
     {
         colour = c;
         GetComponent<SpriteRenderer>().color = c; //sets the colour of the rider sprite
-        
-
     }
 
+    public List<Direction> GetRoute() 
+    {
+        return route;
+    }
 
 }

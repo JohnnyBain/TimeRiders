@@ -23,21 +23,23 @@ public class GameManagerScript : MonoBehaviour
     private List<GameObject> allRiders;
     private List<Direction>[] routes;
     private int numbetOfRiders;
-    private int currentRider = 0;
+    private int currentRider = 3; // determines which rider the player is currently in control of
 
     
 
-
-    //after I've created the board I need to spawn the riders, this should look something like the following 
+    //Core level gameplay loop
     //
-    //for each tile 
-    //  if tile has a ID (if this tile is connected to a rider in some way (spawn/end) and is a spawn)
-    //      if tile ID == current rider
-    //          Spawn a playable rider
+    //  IF (current rider complete && all replays are done)
+    //      IF (completed riders == total riders)
+    //          GameEnd
     //      else
-    //          Spawn a replayRider(ID)
+    //          CurrentRider + 1;
+    //          Restart Riders 
+    //      
     //
     //
+
+    
 
 
 
@@ -49,15 +51,15 @@ public class GameManagerScript : MonoBehaviour
 
         CreateBoardInstance();// creates a board (each time a new ride begins the board is recreated)
 
+        InitaliseRiders();
 
-        currentRiderInstance = Instantiate(RiderPrefab, new Vector3(1, 1, 0), transform.rotation);
         numbetOfRiders = gameBoardScript.GetRiderCount();
 
         Debug.Log("rider count = " + numbetOfRiders);
 
         riderScript = currentRiderInstance.GetComponent<RiderScript>();
-        riderScript.SetLocation(1, 1);
-        riderScript.SetColour(Colours.ElementAt(0));
+        //riderScript.SetLocation(1, 1);
+        //riderScript.SetColour(Colours.ElementAt(0));
 
         allRiders = new List<GameObject>();
         allRiders.Add(currentRiderInstance);
@@ -77,14 +79,54 @@ public class GameManagerScript : MonoBehaviour
         gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
         gameBoardScript = gameBoardInstance.GetComponent<GameBoardScript>();
     }
+
+    //after I've created the board I need to spawn the riders, this should look something like the following 
+    //
+    //  for each tile 
+    //      if tile is a spawn tile
+    //          if tile ID == current rider
+    //              Spawn a playable rider
+    //          else
+    //              Spawn a replayRider(ID)
+    //
+    //
+    private void InitaliseRiders()
+    {
+        GameObject[,] tileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
+        int boardSize = gameBoardInstance.GetComponent<GameBoardScript>().GetBoardSize();
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++) 
+            {
+                if (tileArray[i, j].GetComponent<TileScript>().GetTileType() == TileType.Spawn) //if this tile is a spawn tile
+                {
+                    if (tileArray[i, j].GetComponent<TileScript>().GetRiderID() == currentRider) //if this is where the current rider needs to be spawned
+                    {
+                        currentRiderInstance = Instantiate(RiderPrefab, new Vector3(i, j, 0), transform.rotation);
+                        currentRiderInstance.GetComponent<RiderScript>().SetLocation(i, j);
+                        //Debug.Log("Rider colour = " + ();
+                        currentRiderInstance.GetComponent<RiderScript>().SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //rider ID starts at 1 but the colour list starts at 0
+                    }
+                    else 
+                    {
+                        //spawn the correct replay rider
+                    }
+                }
+            
+            }
+        }
+    }
+
     public void GameTickUpdate() //A method that runs all the game computation that should be run on each turn the player makes (rider collision) 
     {
         Debug.Log("Game tick update");
         GameObject[,] tileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
         foreach (GameObject t in tileArray)
         {
-            if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Count == 1)
+            if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Count == 1 && t.GetComponent<TileScript>().GetRiderID() == currentRider)
             {
+                Debug.Log("Route = ");
+                List<Direction> route = currentRiderInstance.GetComponent<RiderScript>().GetRoute();
                 GameWin();
             }
             else if (t.GetComponent<TileScript>().GetObjectList().Count >= 2)

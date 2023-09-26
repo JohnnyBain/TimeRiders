@@ -95,22 +95,24 @@ public class GameBoardScript : MonoBehaviour
         TileScript SpecialTileScript = specialTile.GetComponent<TileScript>();
         if (char.IsLower(c)) //if the char is lower case it is one of the riders spawns (a = 97 in ascii)
         {
-            int ID = (int)c - 97; //a is not 0 
+            int ID = (int)c - 97; //a is now 0 
 
             SpecialTileScript.SetTileType(TileType.Spawn);
             SpecialTileScript.setColour(GMScript.GetColours().ElementAt(ID));
             specialTile.transform.localScale = new Vector3((float)0.5, (float)0.5,1);
+            SpecialTileScript.SetRiderID(ID + 1); //connects this tile to the rider that needs to spawn at it (riders start at 1)
             //Debug.Log("Spawn");
 
         }
         else //if it is upper case it is one of the riders destinations (A = 65 in ascii)
         {
             RiderCount++;
-            int ID = (int)c - 65; //a is not 0
+            int ID = (int)c - 65; //a is now 0
             SpecialTileScript.SetTileType(TileType.Finish);
             SpecialTileScript.setColour(GMScript.GetColours().ElementAt(ID));
+            SpecialTileScript.SetRiderID(ID + 1); //connects this tile to the rider that needs to finish at it (riders start at 1)
             //Debug.Log("Finish");
-            
+
         }
         
        
@@ -124,5 +126,10 @@ public class GameBoardScript : MonoBehaviour
     public int GetRiderCount() 
     {
         return RiderCount;
+    }
+
+    public int GetBoardSize() 
+    {
+        return BoardSize;
     }
 }
