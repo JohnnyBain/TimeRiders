@@ -128,6 +128,14 @@ public class GameBoardScript : MonoBehaviour
         return RiderCount;
     }
 
+    //clears the lists that contain which objects are currently in that tile
+    public void clearTileLists() 
+    {
+        foreach (GameObject tile in TileArray) 
+        {
+            tile.GetComponent<TileScript>().ClearObjectList();
+        }
+    }
     public int GetBoardSize() 
     {
         return BoardSize;
