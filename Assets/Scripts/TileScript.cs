@@ -86,6 +86,10 @@ public class TileScript : MonoBehaviour
         ObjectList.Remove(obj);
     }
 
+    public void ClearObjectList() 
+    {
+        ObjectList.Clear();
+    }
     public void setColour(Color32 c)
     {
         colour = c;
