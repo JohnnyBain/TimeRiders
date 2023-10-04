@@ -4,32 +4,27 @@ using UnityEngine;
 
 public class TrailManagerScript : MonoBehaviour
 {
-    public GameObject Trail;
-    public GameObject GameBoard;
 
-    private GameManagerScript GMScript;
-    private RiderScript RiderScript;
-
-    public List<GameObject> RiderTrail = new List<GameObject>();
     private GameObject[,] TileArray;
-
     private int targetTrailLength;
     private Color32 colour;
 
 
-    
-    
+    public List<GameObject> RiderTrail = new List<GameObject>();
+    public GameObject Trail;
+    public GameObject GameBoard;
     List<Vector3> TrailVectorLocations;
 
+    private GameManagerScript GMScript;
+    private RiderScript RiderScript;
 
-    
 
     // Start is called before the first frame update
     void Start()
     {
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
-        //RiderScript = GMScript.GetCurrentRider().GetComponent<RiderScript>();
-        //targetTrailLength = RiderScript.GetTrailLength();
+        RiderScript = GMScript.GetCurrentRider().GetComponent<RiderScript>();
+        targetTrailLength = RiderScript.GetTrailLength();
         TileArray = GMScript.GetGameBoard().GetComponent<GameBoardScript>().GetTileArray();
     }
 
@@ -39,15 +34,6 @@ public class TrailManagerScript : MonoBehaviour
 
     }
 
-    private void OnDestroy()
-    {
-        Debug.Log("Trail Manager: OnDestroy");
-        foreach (GameObject trail in RiderTrail) 
-        {
-            Debug.Log("Destroying trail piece");
-            Destroy(trail);
-        }
-    }
     public void manageTrail(Direction direction)
     {
         if (RiderTrail.Count < targetTrailLength)
@@ -59,7 +45,7 @@ public class TrailManagerScript : MonoBehaviour
         {
             moveTrail();
         }
-        //printTrail();
+        printTrail();
 
 
 
@@ -105,12 +91,5 @@ public class TrailManagerScript : MonoBehaviour
     public void SetColour(Color32 c) 
     {
         colour = c;
-    }
-
-    public void setRiderScript(GameObject rider)
-    {
-        RiderScript = rider.GetComponent<RiderScript>();
-        targetTrailLength = RiderScript.GetTrailLength();
-
     }
 }
