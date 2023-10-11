@@ -1585,17 +1585,19 @@ MonoBehaviour:
   MainCamera: {fileID: 4520854703993004528, guid: 8da5b95c46cff3749a08864618fa54b0, type: 3}
   RiderPrefab: {fileID: 6195768096863760953, guid: 48b2e12bad795824ab517983aaddc93d, type: 3}
   GameBoardPrefab: {fileID: 1507755248739912524, guid: 27485344649a49d4b9e1ebf07e7c6c77, type: 3}
+  DelayPrefab: {fileID: 2892848379224553129, guid: 0982762e46f8a084d8502e69e15cd32b, type: 3}
   GameOverScreen: {fileID: 1319509350}
   GameWinScreen: {fileID: 1932263618}
   Colours:
   - serializedVersion: 2
-    rgba: 4285137151
+    rgba: 4294964736
   - serializedVersion: 2
     rgba: 4285528576
   - serializedVersion: 2
     rgba: 4281762815
   - serializedVersion: 2
     rgba: 4293460195
+  timeDelay: 5
 --- !u!4 &2108638797
 Transform:
   m_ObjectHideFlags: 0
