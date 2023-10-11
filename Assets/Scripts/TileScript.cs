@@ -6,18 +6,22 @@ public enum TileType
 {
     Road,
     Wall,
+    Spawn,
     Finish
 }
 
 public class TileScript : MonoBehaviour
 {
-    public GameObject Road;
-    public GameObject Wall;
-    public GameObject Finish;
-    private Color32 colour;
+
+    public GameObject RoadPrefab;
+    public GameObject WallPrefab;
+    public GameObject SpawnPrefab;
+    public GameObject FinishPrefab;
+
     GameObject renderedTile;
 
-
+    private int riderID = 0;
+    private Color32 colour;
     private TileType Ttype;
     private List<GameObject> ObjectList;
 
@@ -25,40 +29,45 @@ public class TileScript : MonoBehaviour
     void Awake()
     {
         ObjectList = new List<GameObject>();
-        
+
     }
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Tile Start ----------");
+        //Debug.Log("Tile Start ----------");
         if (Ttype == TileType.Road)
         {
-            renderedTile = Instantiate(Road, transform);
-            
+            renderedTile = Instantiate(RoadPrefab, transform);
+
         }
         else if (Ttype == TileType.Wall)
         {
-            renderedTile = Instantiate(Wall, transform);
+            renderedTile = Instantiate(WallPrefab, transform);
+        }
+        else if (Ttype == TileType.Spawn)
+        {
+            renderedTile = Instantiate(SpawnPrefab, transform);
+            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render
         }
         else if (Ttype == TileType.Finish)
         {
-            renderedTile = Instantiate(Finish, transform);
-            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render to red
+            renderedTile = Instantiate(FinishPrefab, transform);
+            renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void SetTileType(TileType type) 
+    public void SetTileType(TileType type)
     {
         Ttype = type;
     }
 
-    public TileType GetTileType() 
+    public TileType GetTileType()
     {
         return Ttype;
     }
@@ -67,7 +76,7 @@ public class TileScript : MonoBehaviour
         return renderedTile;
     }
 
-    public void AddObject(GameObject obj) 
+    public void AddObject(GameObject obj)
     {
         ObjectList.Add(obj);
     }
@@ -77,12 +86,25 @@ public class TileScript : MonoBehaviour
         ObjectList.Remove(obj);
     }
 
-    public void setColour(Color32 c) 
+    public void ClearObjectList() 
+    {
+        ObjectList.Clear();
+    }
+    public void setColour(Color32 c)
     {
         colour = c;
     }
-    public List<GameObject> GetObjectList() 
+    public List<GameObject> GetObjectList()
     {
         return ObjectList;
+    }
+
+    public int GetRiderID() 
+    {
+        return riderID;
+    }
+    public void SetRiderID(int n) 
+    {
+        riderID = n;
     }
 }
