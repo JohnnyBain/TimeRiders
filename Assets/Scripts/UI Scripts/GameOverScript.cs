@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameOverScreen : MonoBehaviour
+public class GameOverScript : MonoBehaviour
 {
     GameManagerScript GMScript;
-    public void Setup() 
+    private void Awake()
+    {
+        GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
+    }
+
+    public void SetActive() 
     {
         gameObject.SetActive(true);
-        GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
-
+        GMScript.SetPlayingState(false);
     }
     public void RestartButton()
     {
@@ -20,7 +24,6 @@ public class GameOverScreen : MonoBehaviour
     public void QuitButton() 
     {
         Application.Quit();
-        //GMScript.Exit();
         Debug.Log("Game is exiting");
     }
 }

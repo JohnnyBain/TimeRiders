@@ -33,12 +33,6 @@ public class TrailManagerScript : MonoBehaviour
         TileArray = GMScript.GetGameBoard().GetComponent<GameBoardScript>().GetTileArray();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnDestroy()
     {
         Debug.Log("Trail Manager: OnDestroy");

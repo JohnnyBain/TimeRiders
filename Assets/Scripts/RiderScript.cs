@@ -53,11 +53,6 @@ public class RiderScript : MonoBehaviour
         TMScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
         
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void moveRider(Direction direction)
     {

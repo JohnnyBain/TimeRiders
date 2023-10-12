@@ -14,80 +14,70 @@ public enum RiderStatus  //An enum that describes whether a rider is currently s
 }
 public class GameManagerScript : MonoBehaviour
 {
-
-
     public GameObject MainCamera;
     public GameObject RiderPrefab;
     public GameObject GameBoardPrefab;
-    public GameObject DelayPrefab;
-    public GameOverScreen GameOverScreen;
-    public GameWinScreen GameWinScreen;
-    
+    public GameObject CanvasPrefab;
 
+    private GameObject UIcontroller;
     private GameObject currentRiderInstance;
     private GameObject gameBoardInstance;
 
     private GameBoardScript gameBoardScript;
     private RiderScript currentRiderScript;
 
-    public List<Color32> Colours;
     private RiderStatus[] isRiderDone; // An array of booleans that describe whether a rider has completed there journey
     private GameObject[] AllRiders;
     private List<Direction>[] routes;
-    private int numberOfRiders; //The number of routes/riders that a board has
+    [SerializeField] List<Color32> Colours;
+
+    private int numberOfRiders = 0; //The number of routes/riders that a board has
     private int currentRider = 1; // determines which rider the player is currently in control of
-    private int turnCount;
-    private float time;
-    public float timeDelay = 0.5f;
-    private bool isAutoPlaying = false;
+    private int turnCount = 0;
+    private float time = 0f;
+    private bool playingState = true;
+    [SerializeField] float timeDelay = 0.5f; //Seconds between each automatic step of the replay riders
 
 
-    // Start is called before the first frame update
+
     void Awake()
     {
-        time = 0f;
+        Debug.Log("Instantiating Canvas");
+        UIcontroller = Instantiate(CanvasPrefab);
+        UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive(); // sets the main menu screen to active
+        
+
+
+
         Debug.Log("GameManager Awake ----------");
         GameObject camera = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation);
 
-
         CreateBoardInstance();// creates a board (each time a new ride begins the board is recreated)
-        AllRiders = new GameObject[numberOfRiders];
+        AllRiders = new GameObject[numberOfRiders]; //creates the list that will hold each of the rider (current & replays)
 
         InitaliseRiders();
-
         numberOfRiders = gameBoardScript.GetRiderCount();
-
-        Debug.Log("rider count = " + numberOfRiders);
-
-        //currentRiderScript = currentRiderInstance.GetComponent<RiderScript>();
-        //currentRiderScript.SetLocation(1, 1);
-        //currentRiderScript.SetColour(Colours.ElementAt(0));
-
-        //allRiders = new List<GameObject>();
-
-        //allRiders.Add(currentRiderInstance);
-
-        routes = new List<Direction>[numberOfRiders]; //creating an array of lists to hold the routes of each rider
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (isRiderDone[currentRider - 1] == RiderStatus.Complete) //if the current rider is complete (automatically replay the ReplayRiders)
+        if (playingState) //if we are currently not paused, continue into the game loop
         {
-            time = time + 1f * Time.deltaTime;
-            Debug.Log(time);
-            if (time >= timeDelay) //time Delay = the time between each automatic step of the replay riders
+            if (isRiderDone[currentRider - 1] == RiderStatus.Complete) //if the current rider is complete (automatically replay the ReplayRiders)
             {
-                time = 0f;
-                GameTickUpdate(); //Move rider replays is within this
+                time = time + 1f * Time.deltaTime;
+                //Debug.Log(time);
+                if (time >= timeDelay) //time Delay = the time between each automatic step of the replay riders
+                {
+                    time = 0f;
+                    GameTickUpdate(); //Move rider replays is within this
+                }
             }
-        }
-        else
-        {
-            inputCheck();
+            else
+            {
+                inputCheck();
+            }
         }
     }
 
@@ -98,19 +88,21 @@ public class GameManagerScript : MonoBehaviour
         gameBoardScript = gameBoardInstance.GetComponent<GameBoardScript>();
         numberOfRiders = gameBoardInstance.GetComponent<GameBoardScript>().GetRiderCount();
         routes = new List<Direction>[numberOfRiders];
+        isRiderDone = new RiderStatus[numberOfRiders];
     }
 
 
-
+    /* InitaliseRiders:
+     * This method fetches the tile array from the gameBoard. It goes through the tiles and spawns riders on the spawn tiles.
+     * It only does this if they are the current rider controlled by the player or a rider that already has a route recorded for itself.
+     */
     private void InitaliseRiders()
     {
         turnCount = 0;
-        GameObject[,] tileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
+        GameObject[,] tileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray(); //copying the Tile Array from the game board
         int boardSize = gameBoardInstance.GetComponent<GameBoardScript>().GetBoardSize();
-
-        Debug.Log("-------------------------- number of riders = " + numberOfRiders);
-        isRiderDone = new RiderStatus[numberOfRiders];
-        for (int i = 1; i <= numberOfRiders; i++)
+      
+        for (int i = 1; i <= numberOfRiders; i++) //resetting all the ride statuses
         {
             isRiderDone[i - 1] = RiderStatus.Waiting;
         }
@@ -131,9 +123,9 @@ public class GameManagerScript : MonoBehaviour
                         isRiderDone[currentRider - 1] = RiderStatus.Riding;
                         AllRiders[currentRider - 1] = currentRiderInstance;
                     }
-                    else
+                    else 
                     {
-                        if (routes[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] != null)
+                        if (routes[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] != null) //if there is a saved route for this rider 
                         {
                             GameObject replayRider = Instantiate(RiderPrefab, new Vector3(i, j, 0), transform.rotation);
                             replayRider.GetComponent<RiderScript>().SetLocation(i, j);
@@ -147,29 +139,11 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-    private void DestroyRiders()
-    {
-        foreach (GameObject rider in AllRiders)
-        {
-            Destroy(rider);
-        }
-    }
+    
 
-    //Core level gameplay loop
-    //
-    //  IF (current rider complete && all replays are done)
-    //      IF (completed riders == total riders)
-    //          GameEnd
-    //      else
-    //          CurrentRider + 1;
-    //          Restart Riders 
-    //      
-    //
-    //
-
-    public void GameTick()
+ 
+    public void GameWinCheck()
     {
-        Debug.Log("Current Rider = " + currentRider);
         Debug.Log("RiderStatuses = " + isRiderDone[0] + "," + isRiderDone[1] + "," + isRiderDone[2]);
         if (!isRiderDone.Contains(RiderStatus.Riding)) //if there are no riders still riding
         {
@@ -180,10 +154,9 @@ public class GameManagerScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("Moving to next rider");
                 currentRider++;
                 gameBoardScript.clearTileLists();
-                DestroyRiders();//garbage collect all the current riders
+                DestroyRiders();
                 InitaliseRiders();
             }
         }
@@ -195,26 +168,20 @@ public class GameManagerScript : MonoBehaviour
         MoveRiderReplays(); //everytime the player moves and it was a valid move, move the riders
         foreach (GameObject t in tileArray)
         {
-
-            if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Count == 1 && t.GetComponent<TileScript>().GetRiderID() == currentRider)
-            {
-                List<Direction> route = currentRiderInstance.GetComponent<RiderScript>().GetRoute();
-                Debug.Log("current rider is complete");
-                isRiderDone[currentRider - 1] = RiderStatus.Complete;
-                time = time + 1f * Time.deltaTime;
-                Debug.Log(time);
-
-                isAutoPlaying = true;
-                //GameWin();
-            }
-            else if (t.GetComponent<TileScript>().GetObjectList().Count >= 2)
+            if (t.GetComponent<TileScript>().GetObjectList().Count >= 2)
             {
                 Debug.Log("Collision");
                 GameOver();
                 Debug.Log("x = " + t.transform.position.x + "| y = " + t.transform.position.y);
             }
+            else if(t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Count == 1 && t.GetComponent<TileScript>().GetRiderID() == currentRider)
+            {
+                List<Direction> route = currentRiderInstance.GetComponent<RiderScript>().GetRoute();
+                Debug.Log("current rider is complete");
+                isRiderDone[currentRider - 1] = RiderStatus.Complete;
+            }
         }
-        GameTick();
+        GameWinCheck();
     }
 
     private void inputCheck()
@@ -253,7 +220,6 @@ public class GameManagerScript : MonoBehaviour
         {
             if (routes[i] != null)
             {
-                Debug.Log("Rider -" + i + " has a route");
                 if (routes[i].Count > turnCount) //if the rider has finished
                 {
                     AllRiders[i].GetComponent<RiderScript>().moveRider(routes[i].ElementAt(turnCount));
@@ -267,65 +233,53 @@ public class GameManagerScript : MonoBehaviour
         turnCount++;
     }
 
-    private IEnumerator Wait() 
+    private void DestroyRiders()
     {
-        yield return new WaitForSeconds(5);
+        foreach (GameObject rider in AllRiders)
+        {
+            Destroy(rider); //Destroys the rider and calls the OnDestroy method within the Rider script
+        }
     }
-    private void AutoPlay() //This method is called when the current rider finishes its journey. It steps through the replay riders remaining steps at a set rate
-    {
 
-        if (isRiderDone.Contains(RiderStatus.Riding))
-        {
-            //Instantiate(DelayPrefab);
-            for (int i = 0; i < numberOfRiders; i++)
-            {
-                if (isRiderDone[i] == RiderStatus.Riding)
-                {
-                    MoveRiderReplays();
-                }
-            }
-        }
-        else 
-        {
-            isAutoPlaying = false;
-        }
-    }
-    public void GameOver() 
+    public void GameOver()
     {
-        GameOverScreen.Setup();
+        UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetActive();
     }
 
     public void GameWin() 
     {
-        GameWinScreen.Setup();
+        UIcontroller.transform.GetChild(3).GetComponent<GameWinScript>().SetActive();
     }
 
     public void Exit()
     {
         Application.Quit();
     }
-    //public List<GameObject> GetRiders() 
-    //{
-    //    return allRiders;
-    //}
 
+    //Getters ----------------------
     public GameObject[] GetRiders()
     {
         return AllRiders;
     }
 
-    public GameObject GetCurrentRider() 
+    public GameObject GetCurrentRider()
     {
         return currentRiderInstance;
     }
 
-    public GameObject GetGameBoard() 
+    public GameObject GetGameBoard()
     {
         return gameBoardInstance;
     }
 
-    public List<Color32> GetColours() 
+    public List<Color32> GetColours()
     {
         return Colours;
+    }
+
+    //Setters ----------------------
+    public void SetPlayingState(bool playing) 
+    {
+        playingState = playing;
     }
 }

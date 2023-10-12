@@ -21,39 +21,23 @@ public class GameBoardScript : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-
-        Debug.Log("GameBoard Awake ----------");
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
         riderInstance = GMScript.GetCurrentRider();
         InitialiseBoard();
     }
 
-    private void Start()
-    {
-        Debug.Log("Game Board Start --------------");
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     
     /* 
      This method creates a tileArray of tiles based on the values in a text file (x = wall, 0 = road)
-  
      */
     void InitialiseBoard()
     {
-        string readFromFilePath = Application.streamingAssetsPath + "/TextFiles/" + "testText" + ".txt";
+        string readFromFilePath = Application.streamingAssetsPath + "/TextFiles/" + "Level 2" + ".txt";
         List<string> fileLines = File.ReadAllLines(readFromFilePath).ToList();
         BoardSize = fileLines.First().Replace(" ", string.Empty).Length;
         Debug.Log("Board Size = " + BoardSize);
         this.TileArray = new GameObject[BoardSize, BoardSize];
-
-        Debug.Log("initialising board");
-        
-        
+              
         for (int i = 0; i < BoardSize; i++) 
         {
             string line = fileLines.ElementAt(i);
@@ -101,7 +85,6 @@ public class GameBoardScript : MonoBehaviour
             SpecialTileScript.setColour(GMScript.GetColours().ElementAt(ID));
             specialTile.transform.localScale = new Vector3((float)0.5, (float)0.5,1);
             SpecialTileScript.SetRiderID(ID + 1); //connects this tile to the rider that needs to spawn at it (riders start at 1)
-            //Debug.Log("Spawn");
 
         }
         else //if it is upper case it is one of the riders destinations (A = 65 in ascii)
@@ -111,11 +94,7 @@ public class GameBoardScript : MonoBehaviour
             SpecialTileScript.SetTileType(TileType.Finish);
             SpecialTileScript.setColour(GMScript.GetColours().ElementAt(ID));
             SpecialTileScript.SetRiderID(ID + 1); //connects this tile to the rider that needs to finish at it (riders start at 1)
-            //Debug.Log("Finish");
-
         }
-        
-       
     }
     
     public GameObject[,] GetTileArray() 

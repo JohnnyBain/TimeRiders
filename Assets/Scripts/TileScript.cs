@@ -12,7 +12,6 @@ public enum TileType
 
 public class TileScript : MonoBehaviour
 {
-
     public GameObject RoadPrefab;
     public GameObject WallPrefab;
     public GameObject SpawnPrefab;
@@ -54,12 +53,6 @@ public class TileScript : MonoBehaviour
             renderedTile = Instantiate(FinishPrefab, transform);
             renderedTile.GetComponent<SpriteRenderer>().color = colour; //sets the colour of the sprite render
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void SetTileType(TileType type)
