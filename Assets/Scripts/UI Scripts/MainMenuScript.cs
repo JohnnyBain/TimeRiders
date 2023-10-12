@@ -5,15 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
-    private GameManagerScript GMScript;
+    private MenuManagerScript MMScript;
 
     // Start is called before the first frame update
     void Awake()
     {
-        GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
-        GMScript.SetPlayingState(false);
+        MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
 
-        
         gameObject.SetActive(true);
        
     }

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3365747906463900453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3365747906463900451}
+  - component: {fileID: 3365747906463900450}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameManager
+  m_Icon: {fileID: 2800000, guid: 8a6cca56e2b63344eb4769cd92d93ffb, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3365747906463900451
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3365747906463900453}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3365747906463900450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3365747906463900453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c93acd3cee545b844aadf8a7efe47d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainCamera: {fileID: 4520854703993004528, guid: 8da5b95c46cff3749a08864618fa54b0, type: 3}
+  RiderPrefab: {fileID: 6195768096863760953, guid: 48b2e12bad795824ab517983aaddc93d, type: 3}
+  GameBoardPrefab: {fileID: 1507755248739912524, guid: 27485344649a49d4b9e1ebf07e7c6c77, type: 3}
+  CanvasPrefab: {fileID: 2393846259156420843, guid: a279040ce18b70e429edb1dc0d1255ba, type: 3}
+  Colours:
+  - serializedVersion: 2
+    rgba: 4294964736
+  - serializedVersion: 2
+    rgba: 4285528576
+  - serializedVersion: 2
+    rgba: 4281762815
+  - serializedVersion: 2
+    rgba: 4293460195
+  timeDelay: 0.3

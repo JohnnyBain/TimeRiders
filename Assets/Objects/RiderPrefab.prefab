@@ -137,5 +137,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TrailManagerPrefab: {fileID: 669338876355415096, guid: 726ece082366ec54cade99c8a5090d7d, type: 3}
-  stepSize: 1
-  trailLength: 5
+  trailLength: 6

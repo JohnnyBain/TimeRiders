@@ -14,15 +14,15 @@ public enum RiderStatus  //An enum that describes whether a rider is currently s
 }
 public class GameManagerScript : MonoBehaviour
 {
-    public GameObject MainCamera;
+    
     public GameObject RiderPrefab;
     public GameObject GameBoardPrefab;
     public GameObject CanvasPrefab;
 
-    private GameObject UIcontroller;
     private GameObject currentRiderInstance;
     private GameObject gameBoardInstance;
 
+    private MenuManagerScript MenuManagerScript;
     private GameBoardScript gameBoardScript;
     private RiderScript currentRiderScript;
 
@@ -42,17 +42,15 @@ public class GameManagerScript : MonoBehaviour
 
     void Awake()
     {
+        MenuManagerScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
+        int level = MenuManagerScript.GetComponent<MenuManagerScript>().GetCurrentLevel();
+
         Debug.Log("Instantiating Canvas");
-        UIcontroller = Instantiate(CanvasPrefab);
-        UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive(); // sets the main menu screen to active
+        
+        Debug.Log("GameManager Awake ----------");
         
 
-
-
-        Debug.Log("GameManager Awake ----------");
-        GameObject camera = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation);
-
-        CreateBoardInstance();// creates a board (each time a new ride begins the board is recreated)
+        CreateBoardInstance(level);// creates a board (each time a new ride begins the board is recreated)
         AllRiders = new GameObject[numberOfRiders]; //creates the list that will hold each of the rider (current & replays)
 
         InitaliseRiders();
@@ -81,8 +79,12 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-
-    private void CreateBoardInstance()
+    public void OnDestroy() 
+    {
+        Destroy(gameBoardInstance);
+        DestroyRiders();
+    }
+    private void CreateBoardInstance(int level)
     {
         gameBoardInstance = Instantiate(GameBoardPrefab, new Vector3(0, 0, 0), transform.rotation);
         gameBoardScript = gameBoardInstance.GetComponent<GameBoardScript>();
@@ -144,7 +146,7 @@ public class GameManagerScript : MonoBehaviour
  
     public void GameWinCheck()
     {
-        Debug.Log("RiderStatuses = " + isRiderDone[0] + "," + isRiderDone[1] + "," + isRiderDone[2]);
+        //Debug.Log("RiderStatuses = " + isRiderDone[0] + "," + isRiderDone[1] + "," + isRiderDone[2]);
         if (!isRiderDone.Contains(RiderStatus.Riding)) //if there are no riders still riding
         {
             routes[currentRider - 1] = (currentRiderScript.GetRoute());
@@ -243,12 +245,12 @@ public class GameManagerScript : MonoBehaviour
 
     public void GameOver()
     {
-        UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetActive();
+        MenuManagerScript.ShowGameOverMenu();
     }
 
     public void GameWin() 
     {
-        UIcontroller.transform.GetChild(3).GetComponent<GameWinScript>().SetActive();
+        MenuManagerScript.ShowGameWinMenu();
     }
 
     public void Exit()

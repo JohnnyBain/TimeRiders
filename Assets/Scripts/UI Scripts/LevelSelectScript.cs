@@ -5,11 +5,11 @@ using UnityEngine;
 public class LevelSelectScript : MonoBehaviour
 {
     [SerializeField] int level;
-    GameManagerScript GMScript;
+    MenuManagerScript MMScript;
     // Start is called before the first frame update
     void Awake()
     {
-        GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
+        MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
     }
 
     // Update is called once per frame
@@ -20,9 +20,8 @@ public class LevelSelectScript : MonoBehaviour
 
     public void LoadLevel() 
     {
-        gameObject.SetActive(false); //deactives the button, not the screen
-        
-        GMScript.SetPlayingState(true);
+        MMScript.LoadLevel(level);
+        //gameObject.SetActive(false); //deactives the button, not the screen
     }
     public void LevelOneButtonPress() 
     {

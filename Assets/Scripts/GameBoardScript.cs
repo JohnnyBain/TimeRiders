@@ -12,7 +12,9 @@ public class GameBoardScript : MonoBehaviour
     
 
     GameManagerScript GMScript;
+    MenuManagerScript MMScript;
     private GameObject riderInstance;
+    private int level;
     private int BoardSize;
     private int RiderCount = 0;
     private GameObject[,] TileArray;
@@ -21,8 +23,12 @@ public class GameBoardScript : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
+        level = MMScript.GetCurrentLevel();
+
         GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
         riderInstance = GMScript.GetCurrentRider();
+
         InitialiseBoard();
     }
 
@@ -32,7 +38,7 @@ public class GameBoardScript : MonoBehaviour
      */
     void InitialiseBoard()
     {
-        string readFromFilePath = Application.streamingAssetsPath + "/TextFiles/" + "Level 2" + ".txt";
+        string readFromFilePath = Application.streamingAssetsPath + "/TextFiles/" + "Level "+ level.ToString() + ".txt";
         List<string> fileLines = File.ReadAllLines(readFromFilePath).ToList();
         BoardSize = fileLines.First().Replace(" ", string.Empty).Length;
         Debug.Log("Board Size = " + BoardSize);
@@ -63,6 +69,10 @@ public class GameBoardScript : MonoBehaviour
                             tile.GetComponent<TileScript>().SetTileType(TileType.Road);
                             //Debug.Log("Road");
                             break;
+                        default:
+                            Debug.Log("Error: tile type unrecognised");
+                            break;
+
                     }
                 }
                 TileArray[i, j] = tile;

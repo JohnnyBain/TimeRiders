@@ -5,19 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class GameWinScript : MonoBehaviour
 {
-    GameManagerScript GMScript;
+    MenuManagerScript MMScript;
     private void Awake()
     {
-        GMScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>();
+        MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
     }
     public void SetActive() 
     {
         gameObject.SetActive(true);
-        GMScript.SetPlayingState(false);
+    }
+
+    public void SetInactive()
+    {
+        gameObject.SetActive(false);
     }
     public void NextLevelButton()
     {
-        SceneManager.LoadScene("SampleScene");
+        MMScript.NextLevel();
     }
 
     public void QuitButton() 
