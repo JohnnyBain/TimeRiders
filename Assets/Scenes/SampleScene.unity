@@ -152,8 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f11daf443a83cc24e98961e5f0776de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameManagerPrefab: {fileID: 0}
+  GameManagerPrefab: {fileID: 3365747906463900453, guid: bf1e561f49bfd184d8dbd26c2c0723af, type: 3}
   CanvasPrefab: {fileID: 2393846259156420843, guid: a279040ce18b70e429edb1dc0d1255ba, type: 3}
+  MainCamera: {fileID: 4520854703993004528, guid: 8da5b95c46cff3749a08864618fa54b0, type: 3}
 --- !u!4 &10140057
 Transform:
   m_ObjectHideFlags: 0

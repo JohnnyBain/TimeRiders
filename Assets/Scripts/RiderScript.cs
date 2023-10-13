@@ -11,19 +11,18 @@ public enum Direction
 }
 public class RiderScript : MonoBehaviour
 {
-    GameManagerScript GameManagerScript;
-    TrailManagerScript TrailManagerScript;
+    GameManagerScript gameManagerScript;
+    TrailManagerScript trailManagerScript;
 
     [SerializeField] GameObject TrailManagerPrefab;
 
     GameObject trailManagerInstance;
-    GameObject GameBoardInstance;
+    GameObject gameBoardInstance;
 
     private List<TileType> ValidMoveTiles = new List<TileType> { TileType.Road, TileType.Spawn, TileType.Finish };
     private List<Direction> route = new List<Direction>{ };
 
     private Direction previousDirection = Direction.None;
-    private Direction direction = Direction.None;
     private Color32 colour; //Colour of the rider
     private int xLocation;
     private int yLocation;
@@ -34,36 +33,33 @@ public class RiderScript : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Debug.Log("Rider Awake ----------");
-        GameManagerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>(); //creates a reference to the Game Manager Script to use in this class
+        gameManagerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>(); //creates a reference to the Game Manager Script to use in this class
     }
 
     private void OnDestroy()
     {
-        Debug.Log("RiderScript: onDestroy");
-        Debug.Log("Destroying Trail");
         Destroy(trailManagerInstance);
     }
     private void Start()
     {
-        GameBoardInstance = GameManagerScript.GetGameBoard();
-        GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray()[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //add this rider object to the tile array where it is spawned
+        gameBoardInstance = gameManagerScript.GetGameBoard();
+        gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray()[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //adds this rider to the tile that it was spawned at
         trailManagerInstance = Instantiate(TrailManagerPrefab, transform.position, transform.rotation);// create trail manager with this riders current location and rotation
-        TrailManagerScript = trailManagerInstance.GetComponent<TrailManagerScript>();
-        TrailManagerScript.setRiderScript(gameObject);
-        TrailManagerScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
+        trailManagerScript = trailManagerInstance.GetComponent<TrailManagerScript>(); //creating a reference of the trail manager script attached to this rider
+        trailManagerScript.setRiderScript(gameObject);
+        trailManagerScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
     }
 
     public void moveRider(Direction direction)
     {
-        GameObject[,] TileArray = GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
+        GameObject[,] TileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
         if (ValidMoveCheck(direction)) 
         {
             route.Add(direction);
             switch (direction)
             {
                 case Direction.Right:
-                    TrailManagerScript.manageTrail(Direction.Right);
+                    trailManagerScript.ManageTrail();
                     transform.position = transform.position + (new Vector3(1, 0, 0));
                     previousDirection = Direction.Right;
                     xLocation++;
@@ -71,7 +67,7 @@ public class RiderScript : MonoBehaviour
                     TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().RemoveObject(gameObject); //removing the rider from the last tile
                     break;
                 case Direction.Left:
-                    TrailManagerScript.manageTrail(Direction.Left);
+                    trailManagerScript.ManageTrail();
                     transform.position = transform.position + (new Vector3(-1, 0, 0));
                     previousDirection = Direction.Left;
                     xLocation--;
@@ -79,7 +75,7 @@ public class RiderScript : MonoBehaviour
                     TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().RemoveObject(gameObject);
                     break;
                 case Direction.Up:
-                    TrailManagerScript.manageTrail(Direction.Up);
+                    trailManagerScript.ManageTrail();
                     transform.position = transform.position + (new Vector3(0, 1, 0));
                     previousDirection = Direction.Up;
                     yLocation++;
@@ -87,12 +83,19 @@ public class RiderScript : MonoBehaviour
                     TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().RemoveObject(gameObject);
                     break;
                 case Direction.Down:
-                    TrailManagerScript.manageTrail(Direction.Down);
+                    trailManagerScript.ManageTrail();
                     transform.position = transform.position + (new Vector3(0, -1, 0));
                     previousDirection = Direction.Down;
                     yLocation--;
                     TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject);
                     TileArray[xLocation, yLocation + 1].GetComponent<TileScript>().RemoveObject(gameObject);
+                    break;
+                case Direction.None:
+
+                    Debug.Log("Log: No direction");
+                    break;
+                default:
+                    Debug.LogError("Error: Direction is not recognised as a valid");
                     break;
             }
         }
@@ -106,11 +109,11 @@ public class RiderScript : MonoBehaviour
      */
     public void UpdateRider(Direction direction)
     {
-        GameObject[,] tArray = GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
+        GameObject[,] tArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
         if (ValidMoveCheck(direction)) 
         {
             moveRider(direction);
-            GameManagerScript.GameTickUpdate();
+            gameManagerScript.GameTickUpdate();
         }
     }
 
@@ -124,7 +127,7 @@ public class RiderScript : MonoBehaviour
     bool ValidMoveCheck(Direction direction) 
     {
         bool isValid = false;
-        GameObject[,] TileArray  = GameBoardInstance.GetComponent<GameBoardScript>().GetTileArray(); //loading the GameBoard Tile array locally
+        GameObject[,] TileArray  = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray(); //loading the GameBoard Tile array locally
         switch (direction) // No default required as all potential enum options are accounted for 
         {
             case Direction.Right:
@@ -157,10 +160,6 @@ public class RiderScript : MonoBehaviour
     }
 
     //Getters ----------------------------
-    public Direction GetDirection()
-    {
-        return direction;
-    }
     public int GetXLocation()
     {
         return xLocation;
@@ -179,11 +178,6 @@ public class RiderScript : MonoBehaviour
         return route;
     }
     //Setters ----------------------------
-    public void SetDirection(Direction D)
-    {
-        direction = D;
-    }
-
     public void SetLocation(int x, int y) 
     {
         xLocation = x;

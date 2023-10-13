@@ -7,10 +7,12 @@ public class MenuManagerScript : MonoBehaviour
     [SerializeField] GameObject GameManagerPrefab;
     [SerializeField] GameObject CanvasPrefab;
     [SerializeField] GameObject MainCamera;
+
     private bool playingState;
     private GameObject UIcontroller;
     private int currentLevel;
-    private GameObject GameManagerInstance;
+
+    private GameObject gameManagerInstance;
     // Start is called before the first frame update
     void Awake()
     {
@@ -44,14 +46,14 @@ public class MenuManagerScript : MonoBehaviour
         Debug.Log("Load level - " + levelNumber);
         UIcontroller.transform.GetChild(1).GetComponent<LevelSelectScript>().SetInactive();
 
-        GameManagerInstance = Instantiate(GameManagerPrefab);
+        gameManagerInstance = Instantiate(GameManagerPrefab);
     }
 
     public void NextLevel() 
     {
         UIcontroller.transform.GetChild(3).GetComponent<GameWinScript>().SetInactive();
         currentLevel++;
-        Destroy(GameManagerInstance); //wipe the GameManager for that level and create a new one with the new level set
+        Destroy(gameManagerInstance); //wipe the GameManager for that level and create a new one with the new level set
         Instantiate(GameManagerPrefab);
     }
 
