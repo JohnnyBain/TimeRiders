@@ -107,7 +107,7 @@ public class TrailManagerScript : MonoBehaviour
     }
 
     /* SetRiderScript:
-     * rider - The Rider GameObject from which this trail manager was created and should be connected to
+     * [rider] - The Rider GameObject from which this trail manager was created and should be connected to
      * 
      * Description: Sets the RiderScript member variable to a RiderScript
      *              It's called in RiderScript right after the creation of the trail manager to assign a rider to the trail manager just created

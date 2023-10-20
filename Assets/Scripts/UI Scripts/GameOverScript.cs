@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GameOverScript : MonoBehaviour
 {
+    MenuManagerScript MMScript;
+    private void Awake()
+    {
+        MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
+    }
     public void SetActive() 
     {
         gameObject.SetActive(true);
