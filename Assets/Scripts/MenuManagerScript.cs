@@ -13,6 +13,7 @@ public class MenuManagerScript : MonoBehaviour
     private int currentLevel;
 
     private GameObject gameManagerInstance;
+    private GameObject mainCameraInstance;
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,7 +22,8 @@ public class MenuManagerScript : MonoBehaviour
         UIcontroller = Instantiate(CanvasPrefab);
         UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive();
 
-        GameObject camera = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation);
+        mainCameraInstance = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation);
+
     }
 
     // Update is called once per frame
@@ -53,8 +55,24 @@ public class MenuManagerScript : MonoBehaviour
     {
         UIcontroller.transform.GetChild(3).GetComponent<GameWinScript>().SetInactive();
         currentLevel++;
+        gameManagerInstance.SetActive(false); //Set to inactive so that when the new Board/riders try to look for a gameManager, they find the new one and not the old one)
         Destroy(gameManagerInstance); //wipe the GameManager for that level and create a new one with the new level set
-        Instantiate(GameManagerPrefab);
+        gameManagerInstance = Instantiate(GameManagerPrefab);
+    }
+
+    public void RestartLevel() 
+    {
+        UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetInactive();
+        gameManagerInstance.SetActive(false); //Set to inactive so that when the new Board/riders try to look for a gameManager, they find the new one and not the old one)
+        Destroy(gameManagerInstance); //wipe the GameManager for that level and create a new one with the new level set
+        gameManagerInstance = Instantiate(GameManagerPrefab);
+    }
+
+    public void ReplayRide() 
+    {
+        UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetInactive();
+        gameManagerInstance.GetComponent<GameManagerScript>().StartRiders();
+        SetPlayingState(true);
     }
 
 
@@ -64,7 +82,14 @@ public class MenuManagerScript : MonoBehaviour
     }
     public void SetPlayingState(bool playing)
     {
-        playingState = playing;
+        gameManagerInstance.GetComponent<GameManagerScript>().SetPlayingState(true);
     }
 
+    public void ResetCamera(float x, float y) 
+    {
+        Debug.Log("Camera - (" + x + ")(" + y + ")");
+        mainCameraInstance.SetActive(true);
+        Destroy(mainCameraInstance);
+        mainCameraInstance = Instantiate(MainCamera, new Vector3(x - 0.5f, y - 0.5f, -10), transform.rotation);
+    }
 }

@@ -121,16 +121,17 @@ public class GameManagerScript : MonoBehaviour
     {
         turnCount = 0; //When the riders are spawned the turnCount is reset
         GameObject[,] tileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray(); //copying the Tile Array from the game board
-        int boardSize = gameBoardInstance.GetComponent<GameBoardScript>().GetBoardSize();
-      
+        int boardWidth = gameBoardInstance.GetComponent<GameBoardScript>().GetBoardWidth();
+        int boardHeight = gameBoardInstance.GetComponent<GameBoardScript>().GetBoardHeight();
+
         for (int i = 1; i <= numberOfRiders; i++) //resetting all the ride statuses
         {
             isRiderDone[i - 1] = RiderStatus.Waiting;
         }
 
-        for (int i = 0; i < boardSize; i++) //Going through the x axis of the tiles on the board 
+        for (int i = 0; i < boardWidth; i++) //Going through the x axis of the tiles on the board 
         {
-            for (int j = 0; j < boardSize; j++) //Going through the y axis of the tiles on the board
+            for (int j = 0; j < boardHeight; j++) //Going through the y axis of the tiles on the board
             {
                 if (tileArray[i, j].GetComponent<TileScript>().GetTileType() == TileType.Spawn) //if this tile is a spawn tile
                 {
@@ -178,8 +179,8 @@ public class GameManagerScript : MonoBehaviour
                     GameOver();
                     Debug.Log("x = " + t.transform.position.x + "| y = " + t.transform.position.y); //the offending tile 
                 }
-                //else if 
-                else if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Count == 1 && t.GetComponent<TileScript>().GetRiderID() == currentRider) 
+                //else if the current rider is on the current riders finish line
+                else if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Contains(currentRiderInstance) && t.GetComponent<TileScript>().GetRiderID() == currentRider) 
                 {
                     List<Direction> route = currentRiderInstance.GetComponent<RiderScript>().GetRoute();
                     isRiderDone[currentRider - 1] = RiderStatus.Complete;
@@ -206,14 +207,24 @@ public class GameManagerScript : MonoBehaviour
             }
             else //Another ride is still to complete so clear restart the level on the next rider
             {
-                currentRider++; 
-                gameBoardScript.ClearTileLists(); //wipes the object lists each tile holds
-                DestroyRiders();
-                InitaliseRiders(); //Initalises the riders again (this time with a new replay rider that uses the route saved above)
+                currentRider++;
+                StartRiders();
             }
         }
     }
-   
+
+
+    /* StartRiders:
+     * A method that resets the board and re-initialises the riders 
+     * 
+     */
+    public void StartRiders() 
+    {
+        gameBoardScript.ClearTileLists(); //wipes the object lists each tile holds
+        DestroyRiders();
+        InitaliseRiders(); //Initalises the riders again (this time with a new replay rider that uses the route saved above)
+    }
+
     /* InputCheck:
      * This method is called on every frame whilst playingStatus = true
      * It calls the updateRider method of the current rider (the one the player is in control of) and passes it the direction the player has entered
@@ -286,6 +297,7 @@ public class GameManagerScript : MonoBehaviour
     {
         playingState = false;
         menuManagerScript.ShowGameOverMenu();
+        
     }
     /* GameWin:
      * this method tells the menu manager that the game is won and haults the playing of the game 
