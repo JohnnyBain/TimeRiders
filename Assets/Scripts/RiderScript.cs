@@ -34,20 +34,21 @@ public class RiderScript : MonoBehaviour
     void Awake()
     {
         gameManagerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>(); //creates a reference to the Game Manager Script to use in this class
+        gameBoardInstance = gameManagerScript.GetGameBoard();
     }
 
-    private void OnDestroy()
-    {
-        Destroy(trailManagerInstance);
-    }
+   
     private void Start()
     {
-        gameBoardInstance = gameManagerScript.GetGameBoard();
         gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray()[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //adds this rider to the tile that it was spawned at
         trailManagerInstance = Instantiate(TrailManagerPrefab, transform.position, transform.rotation);// create trail manager with this riders current location and rotation
         trailManagerScript = trailManagerInstance.GetComponent<TrailManagerScript>(); //creating a reference of the trail manager script attached to this rider
         trailManagerScript.setRiderScript(gameObject);
         trailManagerScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
+    }
+    private void OnDestroy()
+    {
+        Destroy(trailManagerInstance);
     }
 
     public void moveRider(Direction direction)

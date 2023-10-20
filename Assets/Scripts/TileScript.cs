@@ -55,6 +55,14 @@ public class TileScript : MonoBehaviour
         }
     }
 
+    /* OnDestroy:
+     * Called when a tile is destroyed. It destroys the rendered tile attached to the tile
+     * 
+     */
+    private void OnDestroy()
+    {
+        Destroy(renderedTile);
+    }
     public void SetTileType(TileType type)
     {
         Ttype = type;
