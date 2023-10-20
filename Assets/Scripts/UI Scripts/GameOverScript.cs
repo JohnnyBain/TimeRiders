@@ -9,11 +9,20 @@ public class GameOverScript : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
-    public void RestartButton()
+    public void SetInactive()
     {
-        SceneManager.LoadScene("SampleScene");
+        gameObject.SetActive(false);
+        MMScript.SetPlayingState(true);
+    }
+    public void RestartLevelButton()
+    {
+        MMScript.RestartLevel();
     }
 
+    public void ReplayRiderButton() 
+    {
+        MMScript.ReplayRide();
+    }
     public void QuitButton() 
     {
         Application.Quit();

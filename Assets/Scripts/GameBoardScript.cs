@@ -13,15 +13,16 @@ public class GameBoardScript : MonoBehaviour
     GameManagerScript gameManagerScript;
     MenuManagerScript menuManagerScript;
 
-    private int BoardSize;
+    private int BoardWidth;
+    private int BoardHeight;
     private int RiderCount = 0;
     private GameObject[,] TileArray;
-
+    
 
     /* Awake:
-     * Description: This method is run immediately after an object with this script attached is initalised
-     *              It creates references to the MenuManager and GameManager scripts to be used in this class
-     *              From the Menu manager we get what level we're supposed to be loading 
+     * This method is run immediately after an object with this script attached is initalised
+     * It creates references to the MenuManager and GameManager scripts to be used in this class
+     * From the Menu manager we get what level we're supposed to be loading 
      */
     void Awake()
     {
@@ -34,10 +35,21 @@ public class GameBoardScript : MonoBehaviour
     }
 
 
-    /* InitaliaseBoard:
+    /* OnDestroy:
+     * Called when the gameBoardScript is destroyed. Destroys all the objects this script has created (all the tiles in the array)
      * 
-     * Description: This method instantiates tile objects to fill the TileArray
-     *              It uses the boardsize counted in from the file to define the dimensions of the array
+     */
+    private void OnDestroy()
+    {
+        foreach (GameObject t in TileArray)
+        {
+            Destroy(t);
+        }
+    }
+
+    /* InitaliaseBoard:
+     * This method instantiates tile objects to fill the TileArray
+     * It uses the boardsize counted in from the file to define the dimensions of the array
      */
     void InitialiseBoard(int levelToLoad)
     {
@@ -45,13 +57,17 @@ public class GameBoardScript : MonoBehaviour
         {
             string readFromFilePath = Application.streamingAssetsPath + "/TextFiles/" + "Level " + levelToLoad.ToString() + ".txt"; //loads the contents of the level file into a string
             List<string> fileLines = File.ReadAllLines(readFromFilePath).ToList(); //loads each line from the file into a string within a list 
-            BoardSize = fileLines.First().Length; //the board is always square so the length of the first string in the list will also be the length of the list
-            TileArray = new GameObject[BoardSize, BoardSize]; //initialising the Tile board using the board size 
-
-            for (int i = 0; i < BoardSize; i++) //traversing each line loaded from the file
+            BoardHeight = fileLines.First().Length; //the board is always square so the length of the first string in the list will also be the length of the list
+            
+            BoardWidth = fileLines.Count();
+            Debug.Log("BoardHeight = " + BoardHeight);
+            Debug.Log("BoardWidth = " + BoardWidth);
+            TileArray = new GameObject[BoardWidth, BoardHeight]; //initialising the Tile board using the board size 
+            menuManagerScript.ResetCamera(((float)(BoardWidth))/2,((float)(BoardHeight))/2);
+            for (int i = 0; i < BoardWidth; i++) //traversing each line loaded from the file
             {
                 string line = fileLines.ElementAt(i);
-                for (int j = 0; j < BoardSize; j++) //traversing each char within that line
+                for (int j = 0; j < BoardHeight; j++) //traversing each char within that line
                 {
                     GameObject tile = Instantiate(TilePrefab, new Vector3(i, j, 0), Quaternion.identity); //creating the tile at the corresponding game space (i = x, j = y)
 
@@ -86,13 +102,15 @@ public class GameBoardScript : MonoBehaviour
         
     }
 
+    
+
     /* InitialiseSpecelTile:
      * [specialTile] - the object reference to the tile being created
      * [c] - the char from the corresponding file location that dictates what the tile will end up ass
      * 
-     * Description: This method creates the tiles that are no roads or walls
-     *              Each rider is connected to two locations on the board, a spawn location (denoted with a lower case letter) 
-     *              and a finish location (denoted with an uppercase of the same letter)
+     * This method creates the tiles that are no roads or walls
+     * Each rider is connected to two locations on the board, a spawn location (denoted with a lower case letter) 
+     * and a finish location (denoted with an uppercase of the same letter)
      */
     private void InitialiseSpecialTile(GameObject specialTile, char c)
     {
@@ -118,7 +136,7 @@ public class GameBoardScript : MonoBehaviour
     }
 
     /* ClearTileLists:
-     * Description: clears the lists that contain which objects are currently in that tile
+     * clears the lists that contain which objects are currently in that tile
      */
     public void ClearTileLists()
     {
@@ -139,8 +157,13 @@ public class GameBoardScript : MonoBehaviour
         return RiderCount;
     }
 
-    public int GetBoardSize() 
+    public int GetBoardWidth() 
     {
-        return BoardSize;
+        return BoardWidth;
+    }
+
+    public int GetBoardHeight() 
+    {
+        return BoardHeight;
     }
 }
