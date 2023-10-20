@@ -1,0 +1,3 @@
+[submodule "TimeRidersLevelGen"]
+	path = TimeRidersLevelGen
+	url = https://github.com/irie612/TimeRidersLevelGen.git
