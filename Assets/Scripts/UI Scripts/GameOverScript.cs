@@ -5,16 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class GameOverScript : MonoBehaviour
 {
-    MenuManagerScript MMScript;
-    private void Awake()
-    {
-        MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
-    }
-
     public void SetActive() 
     {
         gameObject.SetActive(true);
-        MMScript.SetPlayingState(false);
     }
     public void RestartButton()
     {
@@ -24,6 +17,5 @@ public class GameOverScript : MonoBehaviour
     public void QuitButton() 
     {
         Application.Quit();
-        Debug.Log("Game is exiting");
     }
 }

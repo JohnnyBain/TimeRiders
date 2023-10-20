@@ -16,12 +16,12 @@ public class GameBoardScript : MonoBehaviour
     private int BoardSize;
     private int RiderCount = 0;
     private GameObject[,] TileArray;
-    
+
 
     /* Awake:
-     * This method is run immediately after an object with this script attached is initalised
-     * It creates references to the MenuManager and GameManager scripts to be used in this class
-     * From the Menu manager we get what level we're supposed to be loading 
+     * Description: This method is run immediately after an object with this script attached is initalised
+     *              It creates references to the MenuManager and GameManager scripts to be used in this class
+     *              From the Menu manager we get what level we're supposed to be loading 
      */
     void Awake()
     {
@@ -33,10 +33,11 @@ public class GameBoardScript : MonoBehaviour
         InitialiseBoard(level);
     }
 
-    
+
     /* InitaliaseBoard:
-     * This method instantiates tile objects to fill the TileArray
-     * It uses the boardsize counted in from the file to define the dimensions of the array
+     * 
+     * Description: This method instantiates tile objects to fill the TileArray
+     *              It uses the boardsize counted in from the file to define the dimensions of the array
      */
     void InitialiseBoard(int levelToLoad)
     {
@@ -89,9 +90,9 @@ public class GameBoardScript : MonoBehaviour
      * [specialTile] - the object reference to the tile being created
      * [c] - the char from the corresponding file location that dictates what the tile will end up ass
      * 
-     * This method creates the tiles that are no roads or walls
-     * Each rider is connected to two locations on the board, a spawn location (denoted with a lower case letter) 
-     * and a finish location (denoted with an uppercase of the same letter)
+     * Description: This method creates the tiles that are no roads or walls
+     *              Each rider is connected to two locations on the board, a spawn location (denoted with a lower case letter) 
+     *              and a finish location (denoted with an uppercase of the same letter)
      */
     private void InitialiseSpecialTile(GameObject specialTile, char c)
     {
@@ -117,7 +118,7 @@ public class GameBoardScript : MonoBehaviour
     }
 
     /* ClearTileLists:
-     * clears the lists that contain which objects are currently in that tile
+     * Description: clears the lists that contain which objects are currently in that tile
      */
     public void ClearTileLists()
     {

@@ -40,10 +40,9 @@ public class GameManagerScript : MonoBehaviour
 
 
     /* Awake:
-     * Awake is called the moment an an object with this script attached is instantiated
-     * The code in this method is run once
-     * 
-     * It references the MenuManager to find out what level 
+     * Description: Awake is called the moment an an object with this script attached is instantiated
+     *              The code in this method is run once
+     *              It references the MenuManager to find out what level 
      */
     void Awake()
     {
@@ -58,14 +57,14 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* Update:
-     * This is the core method of the game whilst in play. It is called by unity every single frame. For most of the game there is no computation unless the player has entered a move.
-     * most of the time the update loop is just constantly checking for inputs
+     * Description: This is the core method of the game whilst in play. It is called by unity every single frame. For most of the game there is no computation unless the player has entered a move.
+     *              most of the time the update loop is just constantly checking for inputs
      * 
-     * To stop and start play (for pause menus and game over screens) I set a member variable called playingState
-     * The update functions observes this variable before deciding whether to run/skip the game logic this turn 
+     *              To stop and start play (for pause menus and game over screens) I set a member variable called playingState
+     *              The update functions observes this variable before deciding whether to run/skip the game logic this turn 
      * 
-     * If the game is playing and the current rider has completed their journey but the game is not over (other replay riders have yet to finsih theirs)
-     * the update loop will enter a state where the updates are skipped until a certain amount of time has passed. (timeDelay)
+     *              If the game is playing and the current rider has completed their journey but the game is not over (other replay riders have yet to finsih theirs)
+     *              the update loop will enter a state where the updates are skipped until a certain amount of time has passed. (timeDelay)
      */
     void Update()
     {
@@ -89,9 +88,9 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* OnDestroy:
-     * This method is called when a level is concluded
-     * It destroys any objects that are connected to the instance of a level
-     * These Destroy methods themselves have there own OnDestroy() methods that will clear up there own objects
+     * Description: This method is called when a level is concluded
+     *              It destroys any objects that are connected to the instance of a level
+     *              These Destroy methods themselves have there own OnDestroy() methods that will clear up there own objects
      */
     public void OnDestroy() 
     {
@@ -100,7 +99,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* CreateBoardInstance:
-     * Creates the GameBoard and creates a reference of its GameBoardScript to use in this class
+     * Description: Creates the GameBoard and creates a reference of its GameBoardScript to use in this class
      */
     private void CreateBoardInstance()
     {
@@ -112,10 +111,9 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* InitaliseRiders:
-     * This method fetches the tile array from the gameBoard. It goes through the tiles and spawns riders on the spawn tiles.
-     * It only does this if they are the current rider controlled by the player or a rider that already has a route recorded for itself.
-     * 
-     * This method will be called as many times as there are riders in the level (after each ride is complete the riders are destroyed and re initialised
+     * Description: This method fetches the tile array from the gameBoard. It goes through the tiles and spawns riders on the spawn tiles.
+     *              It only does this if they are the current rider controlled by the player or a rider that already has a route recorded for itself.
+     *              This method will be called as many times as there are riders in the level (after each ride is complete the riders are destroyed and re initialised
      */
     private void InitaliseRiders()
     {
@@ -160,10 +158,9 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* GameTickUpdate:
-     * This method is called each time the riders need to be moved. This could either be because the 
-     * player has inputted a move or the replay riders are being moved automatically
-     * 
-     * It contains the computation that decides whether the new game state should results in (winning, losing, or nothing)
+     * Description: This method is called each time the riders need to be moved. This could either be because the 
+     *              player has inputted a move or the replay riders are being moved automatically
+     *              It contains the computation that decides whether the new game state should results in (winning, losing, or nothing)
      */
     public void GameTickUpdate() 
     {
@@ -178,7 +175,7 @@ public class GameManagerScript : MonoBehaviour
                     GameOver();
                     Debug.Log("x = " + t.transform.position.x + "| y = " + t.transform.position.y); //the offending tile 
                 }
-                //else if 
+                //else if the tile is a finish tile, check if this tile is for the current rider, check if there's a rider on it 
                 else if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Count == 1 && t.GetComponent<TileScript>().GetRiderID() == currentRider) 
                 {
                     List<Direction> route = currentRiderInstance.GetComponent<RiderScript>().GetRoute();
@@ -190,9 +187,9 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* GameWinCheck:
-     * This method is called each time the GameTickUpdate occurs (which is everytime and rider (current or replay) moves.
-     * It runs the game logic for when the rides are all complete. If the current ride is not the final ride it saves the route played in by the player
-     * If this is the final ride then the it calls GameWin as all riders have reached their destinations without colliding 
+     * Description: This method is called each time the GameTickUpdate occurs (which is everytime and rider (current or replay) moves.
+     *              It runs the game logic for when the rides are all complete. If the current ride is not the final ride it saves the route played in by the player
+     *              If this is the final ride then the it calls GameWin as all riders have reached their destinations without colliding 
      */
     public void GameWinCheck()
     {
@@ -213,10 +210,10 @@ public class GameManagerScript : MonoBehaviour
             }
         }
     }
-   
+
     /* InputCheck:
-     * This method is called on every frame whilst playingStatus = true
-     * It calls the updateRider method of the current rider (the one the player is in control of) and passes it the direction the player has entered
+     * Description: This method is called on every frame whilst playingStatus = true
+     *              It calls the updateRider method of the current rider (the one the player is in control of) and passes it the direction the player has entered
      */
     private void inputCheck()
     {
@@ -244,8 +241,8 @@ public class GameManagerScript : MonoBehaviour
 
 
     /* MoveRiderReplays:
-     * This method is called to progress all the replay riders a step through their respective routes
-     * It's called whenever the play makes a valid move, and also at time intervals when the replay riders are in automatic mode (when the play has finished their route but the replays have furthere to go)
+     * Description: This method is called to progress all the replay riders a step through their respective routes
+     *              It's called whenever the play makes a valid move, and also at time intervals when the replay riders are in automatic mode (when the play has finished their route but the replays have furthere to go)
      */
     private void MoveRiderReplays()
     {
@@ -255,7 +252,7 @@ public class GameManagerScript : MonoBehaviour
             {
                 if (routes[i].Count > turnCount) //if the rider has more moves to execute
                 {
-                    allRiders[i].GetComponent<RiderScript>().moveRider(routes[i].ElementAt(turnCount)); //move the rider in direction the route dictates for this turn count 
+                    allRiders[i].GetComponent<RiderScript>().MoveRider(routes[i].ElementAt(turnCount)); //move the rider in direction the route dictates for this turn count 
                     if (routes[i].Count == turnCount + 1) //if this is the last move
                     {
                         isRiderDone[i] = RiderStatus.Complete; //set this riders status to complete
@@ -267,9 +264,8 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* DestroyRiders:
-     * Destroys all the riders that are currently in the level
-     * 
-     * This is called both when the player is ready to complete a new ride, and when the level is complete and the player can progress to the next
+     * Description: Destroys all the riders that are currently in the level
+     *              This is called both when the player is ready to complete a new ride, and when the level is complete and the player can progress to the next
      */
     private void DestroyRiders()
     {
@@ -280,7 +276,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
     /* GameOver:
-     * this method tells the menu manager that the game is over and haults the playing of the game 
+     * Description: this method tells the menu manager that the game is over and haults the playing of the game 
      */
     public void GameOver()
     {
@@ -288,7 +284,7 @@ public class GameManagerScript : MonoBehaviour
         menuManagerScript.ShowGameOverMenu();
     }
     /* GameWin:
-     * this method tells the menu manager that the game is won and haults the playing of the game 
+     * Description: this method tells the menu manager that the game is won and haults the playing of the game 
      */
     public void GameWin() 
     {
