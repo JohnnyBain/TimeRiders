@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
-using TMPro.Examples;
+//using TMPro.Examples;
 using System.Diagnostics.CodeAnalysis;
 
 public enum RiderStatus  //An enum that describes whether a rider is currently spawned, has not be spawned yet, or has be spawned and is complete
