@@ -8,6 +8,8 @@ public class MenuManagerScript : MonoBehaviour
     [SerializeField] GameObject CanvasPrefab;
     [SerializeField] GameObject MainCamera;
 
+    private static MenuManagerScript Instance;
+
     private bool playingState;
     private GameObject UIcontroller;
     private int currentLevel;
@@ -21,12 +23,21 @@ public class MenuManagerScript : MonoBehaviour
     */
     void Awake()
     {
+        if (Instance == null) //singleton
+        {
+            Instance = this;
+            Debug.Log("Menu Manager awake");
+            UIcontroller = Instantiate(CanvasPrefab); //creating an instance of the CanvasPrefab (the CanvasPrefab is the parent of all the different menu screens)
+            UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive(); //set the main menu to active
 
-        Debug.Log("Menu Manager awake");
-        UIcontroller = Instantiate(CanvasPrefab); //creating an instance of the CanvasPrefab (the CanvasPrefab is the parent of all the different menu screens)
-        UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive(); //set the main menu to active
+            mainCameraInstance = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation); //create the main camera
+        }
+        else 
+        {
+            Destroy(Instance);
+        }
 
-        mainCameraInstance = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation); //create the main camera
+        
 
     }
     

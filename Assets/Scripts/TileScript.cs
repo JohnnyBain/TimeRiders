@@ -37,7 +37,6 @@ public class TileScript : MonoBehaviour
         if (Ttype == TileType.Road)
         {
             renderedTile = Instantiate(RoadPrefab, transform);
-
         }
         else if (Ttype == TileType.Wall)
         {

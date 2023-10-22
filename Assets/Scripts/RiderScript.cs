@@ -12,6 +12,7 @@ public enum Direction
 public class RiderScript : MonoBehaviour
 {
     GameManagerScript gameManagerScript;
+    GameBoardScript gameBoardScript;
     TrailManagerScript trailManagerScript;
 
     [SerializeField] GameObject TrailManagerPrefab;
@@ -35,10 +36,15 @@ public class RiderScript : MonoBehaviour
      */
     void Awake()
     {
-        gameManagerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>(); //creates a reference to the Game Manager Script to use in this class
-        gameBoardInstance = gameManagerScript.GetGameBoard();
+        //gameManagerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagerScript>(); //creates a reference to the Game Manager Script to use in this class
+        //gameBoardInstance = gameManagerScript.GetGameBoard();
     }
 
+    public void Init(GameManagerScript GMScript, GameBoardScript GBScript) 
+    {
+        gameManagerScript = GMScript;
+        gameBoardScript = GBScript;
+    }
    /* Start: 
     * Description: This method is called on the first frame update after the riders creation
     *              The reason this code is not in awake is because after a rider is instantiated it's passed it's location through the SetLocation method
