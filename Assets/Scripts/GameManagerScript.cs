@@ -15,7 +15,8 @@ public enum RiderStatus  //An enum that describes whether a rider is currently s
 public class GameManagerScript : MonoBehaviour
 {
 
-    [SerializeField] GameObject RiderPrefab;
+    [SerializeField] GameObject ReplayRiderPrefab;
+    [SerializeField] GameObject PlayerRiderPrefab;
     [SerializeField] GameObject GameBoardPrefab;
     [SerializeField] GameObject CanvasPrefab;
 
@@ -134,8 +135,8 @@ public class GameManagerScript : MonoBehaviour
                 {
                     if (tileArray[i, j].GetComponent<TileScript>().GetRiderID() == currentRider) //if this is where the current rider needs to be spawned
                     {
-                        currentRiderInstance = Instantiate(RiderPrefab, new Vector3(i, j, 0), transform.rotation); //create current rider 
-                        currentRiderScript = currentRiderInstance.GetComponent<RiderScript>(); //create a reference for the script of the created rider 
+                        currentRiderInstance = Instantiate(PlayerRiderPrefab, new Vector3(i, j, 0), transform.rotation); //create current rider 
+                        currentRiderScript = currentRiderInstance.GetComponent<PlayerRiderScript>(); //create a reference for the script of the created rider 
                         currentRiderScript.SetLocation(i, j); //set the riders location to that of the tile it was spawned on
                         currentRiderScript.SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list
                         isRiderDone[currentRider - 1] = RiderStatus.Riding; //set this riders status to riding
@@ -145,9 +146,9 @@ public class GameManagerScript : MonoBehaviour
                     {
                         if (routes[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] != null) //if there is a saved route for this rider 
                         {
-                            GameObject replayRider = Instantiate(RiderPrefab, new Vector3(i, j, 0), transform.rotation); //create replay rider 
-                            replayRider.GetComponent<RiderScript>().SetLocation(i, j); //set the riders location to that of the tile it was spawned on
-                            replayRider.GetComponent<RiderScript>().SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list
+                            GameObject replayRider = Instantiate(ReplayRiderPrefab, new Vector3(i, j, 0), transform.rotation); //create replay rider 
+                            replayRider.GetComponent<ReplayRiderScript>().SetLocation(i, j); //set the riders location to that of the tile it was spawned on
+                            replayRider.GetComponent<ReplayRiderScript>().SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list
                             isRiderDone[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] = RiderStatus.Riding; //set this riders status to riding
                             allRiders[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] = replayRider; //add this rider to the list of riders in the game space
                         }
@@ -262,7 +263,7 @@ public class GameManagerScript : MonoBehaviour
             {
                 if (routes[i].Count > turnCount) //if the rider has more moves to execute
                 {
-                    allRiders[i].GetComponent<RiderScript>().moveRider(routes[i].ElementAt(turnCount)); //move the rider in direction the route dictates for this turn count 
+                    allRiders[i].GetComponent<ReplayRiderScript>().MoveRider(routes[i].ElementAt(turnCount)); //move the rider in direction the route dictates for this turn count 
                     if (routes[i].Count == turnCount + 1) //if this is the last move
                     {
                         isRiderDone[i] = RiderStatus.Complete; //set this riders status to complete

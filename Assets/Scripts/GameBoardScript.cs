@@ -117,7 +117,7 @@ public class GameBoardScript : MonoBehaviour
         TileScript SpecialTileScript = specialTile.GetComponent<TileScript>();
         if (char.IsLower(c)) //if the char is lower case it is a spawn location
         {
-            int ID = (int)c - 97; //a is now 0 (a = 97 in ascii)
+            int ID = (int)c - 97; //a is now 0 (a = 97 in ascii) // TODO 97 to (int) 'a'
 
             SpecialTileScript.SetTileType(TileType.Spawn);
             SpecialTileScript.setColour(gameManagerScript.GetColours().ElementAt(ID)); //special tiles share the same colour as the rider that they are connected to 
@@ -128,7 +128,7 @@ public class GameBoardScript : MonoBehaviour
         else //if the char is upper case it is a finish location 
         {
             RiderCount++; //for every finish location on a level there needs to be another rider
-            int ID = (int)c - 65; //a is now 0 (A = 65 in ascii)
+            int ID = (int)c - 65; //a is now 0 (A = 65 in ascii) // TODO 97 to (int) 'A'
             SpecialTileScript.SetTileType(TileType.Finish);
             SpecialTileScript.setColour(gameManagerScript.GetColours().ElementAt(ID)); //special tiles share the same colour as the rider that they are connected to
             SpecialTileScript.SetRiderID(ID + 1); //connects this tile to the rider that needs to finish at it (riders start at 1)

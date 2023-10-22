@@ -8,7 +8,7 @@ public class TrailManagerScript : MonoBehaviour
     [SerializeField] GameObject GameBoard;
 
     private GameManagerScript gameManagerScript;
-    private RiderScript riderScript;
+    private IRider riderInterface;
 
     private List<GameObject> riderTrail = new List<GameObject>();
     private GameObject[,] tileArray;
@@ -59,10 +59,10 @@ public class TrailManagerScript : MonoBehaviour
      */
     private void AddTrail()
     {
-        GameObject trail = Instantiate(Trail, new Vector3(riderScript.GetXLocation(), riderScript.GetYLocation(), 0), transform.rotation); //creates a trail node where the rider currently is (before it has moved to the new location)
+        GameObject trail = Instantiate(Trail, new Vector3(riderInterface.GetXLocation(), riderInterface.GetYLocation(), 0), transform.rotation); //creates a trail node where the rider currently is (before it has moved to the new location)
         trail.GetComponent<SpriteRenderer>().color = colour; //sets the trail nodes colour to the same as the trail manager's
         riderTrail.Insert(0, trail); //add it to the start of the trail list
-        tileArray[riderScript.GetXLocation(), riderScript.GetYLocation()].GetComponent<TileScript>().AddObject(trail); //adds the trail node object to the list of objects for the tile it is currently on
+        tileArray[riderInterface.GetXLocation(), riderInterface.GetYLocation()].GetComponent<TileScript>().AddObject(trail); //adds the trail node object to the list of objects for the tile it is currently on
     }
 
     /* MoveTrail:
@@ -72,8 +72,8 @@ public class TrailManagerScript : MonoBehaviour
     {
         Vector3 temp = riderTrail[0].transform.position; //storing the location of the first piece of trail
         tileArray[(int)riderTrail[0].transform.position.x, (int)riderTrail[0].transform.position.y].GetComponent<TileScript>().RemoveObject(riderTrail[0]);//removing the trail node from it's old tile's object list
-        riderTrail[0].transform.position = new Vector3(riderScript.GetXLocation(), riderScript.GetYLocation(),0); //moving the trail node to the riders location (before the rider has moved
-        tileArray[riderScript.GetXLocation(), riderScript.GetYLocation()].GetComponent<TileScript>().AddObject(riderTrail[0]);//adding the trail to the new tile's object list
+        riderTrail[0].transform.position = new Vector3(riderInterface.GetXLocation(), riderInterface.GetYLocation(),0); //moving the trail node to the riders location (before the rider has moved
+        tileArray[riderInterface.GetXLocation(), riderInterface.GetYLocation()].GetComponent<TileScript>().AddObject(riderTrail[0]);//adding the trail to the new tile's object list
 
         for (int i = 1; i < riderTrail.Count; i++) //shift every other piece of trail up to the next spot 
         {
@@ -112,9 +112,10 @@ public class TrailManagerScript : MonoBehaviour
      * Description: Sets the RiderScript member variable to a RiderScript
      *              It's called in RiderScript right after the creation of the trail manager to assign a rider to the trail manager just created
      */
-    public void setRiderScript(GameObject rider)
+    public void setRiderInterface(GameObject rider)
     {
-        riderScript = rider.GetComponent<RiderScript>();
-        targetTrailLength = riderScript.GetTrailLength(); //retrieves the desired length of the trail from the rider
+        riderInterface = rider.GetComponent<IRider>();
+        
+        targetTrailLength = riderInterface.GetTrailLength(); //retrieves the desired length of the trail from the rider
     }
 }

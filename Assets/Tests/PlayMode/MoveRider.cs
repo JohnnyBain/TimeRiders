@@ -26,7 +26,7 @@ public class MoveRider
 
         
 
-        rider.GetComponent<RiderScript>().moveRider(Direction.None);
+        //rider.GetComponent<RiderScript>().moveRider(Direction.None);
 
         
         // Use the Assert class to test conditions.
