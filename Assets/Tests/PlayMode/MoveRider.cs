@@ -7,28 +7,43 @@ using UnityEditor;
 
 public class MoveRider
 {
-    GameObject GameManagerPrefab;
-    GameObject MenuManagerPrefab;
+    GameBoardScript GameBoardScript;
+    GameManagerScript gameManagerScript;
+    MenuManagerScript menuManagerScript;
 
     [SetUp]
     public void Setup() 
     {
-        GameObject MenuManager = GameObject.Instantiate(MenuManagerPrefab);
-        GameObject GameManager = GameObject.Instantiate(GameManagerPrefab);
+
+        GameObject MenuManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Objects/MenuManager.prefab");
+
+        Debug.Log("Test Starting");
+        
+        MenuManagerScript menuManagerScript = GameObject.Instantiate(MenuManagerPrefab).GetComponent<MenuManagerScript>();
+
+        menuManagerScript.LoadLevel(100);
+
+        gameManagerScript = menuManagerScript.GetGameInstance().GetComponent<GameManagerScript>();
     }
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
     public IEnumerator MoveUp()
     {
-        var rider = new GameObject();
-        rider.AddComponent<RiderScript>();
-
         
+        GameBoardScript gameBoardScript = gameManagerScript.GetGameBoard().GetComponent<GameBoardScript>();
+        PlayerRiderScript playerRiderScript = gameManagerScript.GetCurrentRider().GetComponent<PlayerRiderScript>();
+
+        //Debug.Log("Movement Test, starting X location = " + playerRiderScript.GetXLocation());
+        Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
+
+        Assert.AreEqual(playerRiderScript.GetYLocation(), 8);
+
+
 
         //rider.GetComponent<RiderScript>().moveRider(Direction.None);
 
-        
+
         // Use the Assert class to test conditions.
         // Use yield to skip a frame.
         yield return null;

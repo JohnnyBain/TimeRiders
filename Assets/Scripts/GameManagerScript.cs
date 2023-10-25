@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Unity.VisualScripting;
-//using TMPro.Examples;
-using System.Diagnostics.CodeAnalysis;
 
 public enum RiderStatus  //An enum that describes whether a rider is currently spawned, has not be spawned yet, or has be spawned and is complete
 {
@@ -25,7 +21,7 @@ public class GameManagerScript : MonoBehaviour
 
     private MenuManagerScript menuManagerScript;
     private GameBoardScript gameBoardScript;
-    private RiderScript currentRiderScript;
+    private PlayerRiderScript currentRiderScript;
 
     private RiderStatus[] isRiderDone; // An array of booleans that describe whether a rider has completed their journey
     private GameObject[] allRiders; //An array of all the riders 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuManagerScript : MonoBehaviour
@@ -10,9 +8,8 @@ public class MenuManagerScript : MonoBehaviour
 
     private static MenuManagerScript Instance;
 
-    private bool playingState;
     private GameObject UIcontroller;
-    private int currentLevel;
+    static private int currentLevel;
 
     private GameObject gameManagerInstance;
     private GameObject mainCameraInstance;
@@ -148,5 +145,12 @@ public class MenuManagerScript : MonoBehaviour
         gameManagerInstance.GetComponent<GameManagerScript>().SetPlayingState(true);
     }
 
-   
+
+    /*  Test
+     * 
+     */
+    public GameObject GetGameInstance() 
+    {
+    return gameManagerInstance;
+    }
 }

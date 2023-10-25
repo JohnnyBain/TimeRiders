@@ -1,14 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IRider 
-{
-    int GetXLocation();
-    int GetYLocation();
-
-    int GetTrailLength();
-}
 
 public enum Direction
 {
@@ -18,10 +10,10 @@ public enum Direction
     Up,
     Down
 }
+
 public class RiderScript : MonoBehaviour
 {
-    GameManagerScript gameManagerScript;
-    GameBoardScript gameBoardScript;
+    protected GameManagerScript gameManagerScript;
     TrailManagerScript trailManagerScript;
 
     [SerializeField] protected GameObject TrailManagerPrefab;
@@ -31,8 +23,6 @@ public class RiderScript : MonoBehaviour
 
     
     private List<Direction> route = new List<Direction>{ };
-
-    private Direction previousDirection = Direction.None;
     private Color32 colour; //Colour of the rider
     protected int xLocation;
     protected int yLocation;
@@ -49,11 +39,6 @@ public class RiderScript : MonoBehaviour
         gameBoardInstance = gameManagerScript.GetGameBoard();
     }
 
-    public void Init(GameManagerScript GMScript, GameBoardScript GBScript) 
-    {
-        gameManagerScript = GMScript;
-        gameBoardScript = GBScript;
-    }
    /* Start: 
     * Description: This method is called on the first frame update after the riders creation
     *              The reason this code is not in awake is because after a rider is instantiated it's passed it's location through the SetLocation method
@@ -63,7 +48,7 @@ public class RiderScript : MonoBehaviour
         gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray()[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //adds this rider to the tile that it was spawned at
         trailManagerInstance = Instantiate(TrailManagerPrefab, transform.position, transform.rotation);// create trail manager with this riders current location and rotation
         trailManagerScript = trailManagerInstance.GetComponent<TrailManagerScript>(); //creating a reference of the trail manager script attached to this rider
-        trailManagerScript.setRiderInterface(gameObject);
+        trailManagerScript.setRiderScript(gameObject);
         trailManagerScript.SetColour(colour); //sets the colour of the trail sprites to the same colour as the rider
     }
 
@@ -91,32 +76,28 @@ public class RiderScript : MonoBehaviour
         {
             case Direction.Right:
                 trailManagerScript.ManageTrail();
-                transform.position = transform.position + (new Vector3(1, 0, 0)); //change the current position by +1 in the x axis
-                previousDirection = Direction.Right; 
+                transform.position = transform.position + ToVector3(direction); //change the current position based on what the ToVector3 function decided
                 xLocation++; //adjust the xLocation member variable to contain the new location
                 TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //adding the rider to the new tile
                 TileArray[xLocation - 1, yLocation].GetComponent<TileScript>().RemoveObject(gameObject); //removing the rider from the last tile
                 break;
             case Direction.Left: //dito ( -1 in the x axis)
                 trailManagerScript.ManageTrail();
-                transform.position = transform.position + (new Vector3(-1, 0, 0));
-                previousDirection = Direction.Left;
+                transform.position = transform.position + ToVector3(direction);
                 xLocation--;
                 TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject);
                 TileArray[xLocation + 1, yLocation].GetComponent<TileScript>().RemoveObject(gameObject);
                 break;
             case Direction.Up: //dito ( +1 in the y axis)
                 trailManagerScript.ManageTrail();
-                transform.position = transform.position + (new Vector3(0, 1, 0));
-                previousDirection = Direction.Up;
+                transform.position = transform.position + ToVector3(direction);
                 yLocation++;
                 TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject);
                 TileArray[xLocation, yLocation - 1].GetComponent<TileScript>().RemoveObject(gameObject);
                 break;
             case Direction.Down: //dito ( -1 in the y axis)
                 trailManagerScript.ManageTrail();
-                transform.position = transform.position + (new Vector3(0, -1, 0));
-                previousDirection = Direction.Down;
+                transform.position = transform.position + ToVector3(direction);
                 yLocation--;
                 TileArray[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject);
                 TileArray[xLocation, yLocation + 1].GetComponent<TileScript>().RemoveObject(gameObject);
@@ -132,17 +113,43 @@ public class RiderScript : MonoBehaviour
         }
     }
 
-    /* UpdateRider:
-     * [direction] - The direction the rider should move in 
+    /* ToVector3
+     * in:
+     * [direction] - the direction the rider is moving in
      * 
-     * Description: This method checks if the direction is valid. If it is it moves the rider and then calls GameTickUpdate which runs the post move logic
+     * out:
+     * [directionVector] - the vector to move the rider in
      * 
+     * Description: This method creates a Vector3 to be added to the riders current transform based on what direction it is trying to go in
      */
-    public virtual void UpdateRider(Direction direction)
+    private Vector3 ToVector3(Direction direction) 
     {
-        MoveRider(direction);
-        gameManagerScript.GameTickUpdate();
+        Vector3 directionVector = new Vector3(0, 0, 0); ;
+        switch (direction)
+        {
+            case Direction.Right:
+                directionVector = new Vector3(1, 0, 0);
+                break;
+            case Direction.Left:
+                directionVector = new Vector3(-1, 0, 0);
+                break;
+            case Direction.Up:
+                directionVector = new Vector3(0, 1, 0);
+                break;
+            case Direction.Down:
+                directionVector = new Vector3(0, -1, 0);
+                break;
+            case Direction.None:
+                Debug.LogError("No Transform for Direction.None, returning an empty Vector3" );
+                break;
+            default:
+                Debug.LogError("Cannot Transoform this Direction, returning an empty Vector3");
+                break;
+        }
+        return directionVector;
     }
+
+    
 
     
 
@@ -180,9 +187,5 @@ public class RiderScript : MonoBehaviour
         colour = desiredColour;
         GetComponent<SpriteRenderer>().color = desiredColour; 
     }
-
-    
-
-     
 
 }

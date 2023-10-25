@@ -1,25 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRiderScript : RiderScript, IRider
+public class PlayerRiderScript : RiderScript
 {
-    private List<TileType> ValidMoveTiles = new List<TileType> { TileType.Road, TileType.Spawn, TileType.Finish };
+    private List<TileType> ValidMoveTiles = new List<TileType> { TileType.Road, TileType.Spawn, TileType.Finish }; //a list of valid tile types that a player can move onto
     
     
-    public override void MoveRider(Direction direction) 
-    {
-        if (ValidMoveCheck(direction)) 
-        {
-            base.MoveRider(direction);
-        }
-    }
 
-    public override void UpdateRider(Direction direction) 
+    /* UpdateRider:
+    * [direction] - The direction the rider should move in 
+    * 
+    * Description: This method checks if the direction is valid. If it is it moves the rider and then calls GameTickUpdate which runs the post move logic
+    *              Unlike ReplayRiders, when the Player rider moves the whole game takes a step forward (hence GameTickUpdate)
+    */
+    public void UpdateRider(Direction direction) 
     {
         if (ValidMoveCheck(direction))
         {
-            base.UpdateRider(direction);
+            MoveRider(direction);
+            gameManagerScript.GameTickUpdate();
         }
     }
 
