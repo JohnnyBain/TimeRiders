@@ -60,6 +60,11 @@ public class MenuManagerScript : MonoBehaviour
      */
     public void LoadLevel(int levelNumber)
     {
+        if (gameManagerInstance != null) 
+        {
+            gameManagerInstance.SetActive(false); //Set to inactive so that when the new Board/riders try to look for a gameManager, they find the new one and not the old one)
+            Destroy(gameManagerInstance); //wipe the GameManager for that level and create a new one with the new level set
+        } 
         currentLevel = levelNumber;
         Debug.Log("Load level - " + levelNumber);
         UIcontroller.transform.GetChild(1).GetComponent<LevelSelectScript>().SetInactive(); // turning off the level select menu
@@ -152,5 +157,13 @@ public class MenuManagerScript : MonoBehaviour
     public GameObject GetGameInstance() 
     {
     return gameManagerInstance;
+    }
+
+
+    private void OnDestroy()
+    {
+        Destroy(gameManagerInstance);
+        Destroy(mainCameraInstance);
+        Destroy(UIcontroller);
     }
 }

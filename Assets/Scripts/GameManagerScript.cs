@@ -18,13 +18,13 @@ public class GameManagerScript : MonoBehaviour
 
     private GameObject currentRiderInstance;
     private GameObject gameBoardInstance;
+    private GameObject[] allRiders; //An array of all the riders 
 
     private MenuManagerScript menuManagerScript;
     private GameBoardScript gameBoardScript;
     private PlayerRiderScript currentRiderScript;
 
     private RiderStatus[] isRiderDone; // An array of booleans that describe whether a rider has completed their journey
-    private GameObject[] allRiders; //An array of all the riders 
     private List<Direction>[] routes; //An array of the routes each of the riders for game have taken (each route is a list of the individual direction taken). If a rider has yet to ride its rout will be null
     [SerializeField] List<Color32> Colours; //The list of colours that the riders will each be assigned (rider 1 = element 0)
 

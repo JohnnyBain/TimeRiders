@@ -32,7 +32,7 @@ public class PlayerRiderScript : RiderScript
      */
     bool ValidMoveCheck(Direction direction)
     {
-        bool isValid = false;
+        bool isValid = false; 
         GameObject[,] TileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray(); //loading the GameBoard Tile array locally
         switch (direction) // No default required as all potential enum options are accounted for 
         {
