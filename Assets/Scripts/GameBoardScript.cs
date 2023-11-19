@@ -101,8 +101,6 @@ public class GameBoardScript : MonoBehaviour
         
     }
 
-
-
     /* InitialiseSpecelTile:
      * [specialTile] - The object reference to the tile being created
      * [c] - The char from the corresponding file location that dictates what the tile will end up ass

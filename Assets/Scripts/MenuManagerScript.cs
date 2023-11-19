@@ -33,11 +33,18 @@ public class MenuManagerScript : MonoBehaviour
         {
             Destroy(Instance);
         }
-
-        
-
     }
-    
+
+    /* OnDestroy:
+    * Description: This method is called when the MenuManager object is destroyed. It destroys any of the objects that it created.
+    */
+    private void OnDestroy()
+    {
+        Destroy(gameManagerInstance);
+        Destroy(mainCameraInstance);
+        Destroy(UIcontroller);
+    }
+
     /* ShowGameOverMenu:
     * Description: This method turns on the Game Over screen so it is shown to the player
     */
@@ -136,6 +143,24 @@ public class MenuManagerScript : MonoBehaviour
         return currentLevel;
     }
 
+
+    /*  Test
+     * 
+     */
+    public GameObject GetGameInstance()
+    {
+        return gameManagerInstance;
+    }
+
+    /* GetUIController:
+     * Description: returns the UIcontroller. It's called in test scripts that need to find out what menu is currently being displayed
+     * 
+     */
+    public GameObject GetUIController() 
+    {
+        return UIcontroller;
+    }
+
     //Setters -------------------------
 
     /* SetPlayingState:
@@ -149,21 +174,5 @@ public class MenuManagerScript : MonoBehaviour
     {
         gameManagerInstance.GetComponent<GameManagerScript>().SetPlayingState(true);
     }
-
-
-    /*  Test
-     * 
-     */
-    public GameObject GetGameInstance() 
-    {
-    return gameManagerInstance;
-    }
-
-
-    private void OnDestroy()
-    {
-        Destroy(gameManagerInstance);
-        Destroy(mainCameraInstance);
-        Destroy(UIcontroller);
-    }
+    
 }

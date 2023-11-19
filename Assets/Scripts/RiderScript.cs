@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum Direction
 {
     None,
@@ -28,7 +27,6 @@ public class RiderScript : MonoBehaviour
     protected int yLocation;
 
     [SerializeField] protected int trailLength;
-
 
     /* Awake:
      * Description: This method is called upon the creation of a rider 
@@ -149,9 +147,6 @@ public class RiderScript : MonoBehaviour
         return directionVector;
     }
 
-    
-
-    
 
     //Getters ----------------------------
     public int GetXLocation()

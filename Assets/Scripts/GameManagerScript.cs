@@ -321,6 +321,10 @@ public class GameManagerScript : MonoBehaviour
         return Colours;
     }
 
+    public bool GetPlayingState() 
+    {
+        return playingState;
+    }
     //Setters ----------------------
     public void SetPlayingState(bool playing) 
     {

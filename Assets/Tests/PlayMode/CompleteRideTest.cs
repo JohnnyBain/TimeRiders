@@ -5,6 +5,12 @@ using UnityEngine.TestTools;
 using UnityEditor;
 using System.Linq;
 
+/* Description: This is a test to check that the correct behaviour is seen when
+ *              a ride is complete. The game board should be reset and the 
+ *              current rider in a new spawn location. The replay rider should have been
+ *              spawned where the last riders route started.
+ */
+
 public class CompleteRideTest
 {
     GameManagerScript gameManagerScript;
@@ -12,27 +18,24 @@ public class CompleteRideTest
     PlayerRiderScript playerRiderScript;
 
     [OneTimeSetUp]
-    public void OneTimeSetup() 
+    public void OneTimeSetup()  //Setting up the test level
     {
-
-        Debug.Log("Test Setup");
         GameObject MenuManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Objects/MenuManager.prefab");
         menuManagerScript = GameObject.Instantiate(MenuManagerPrefab).GetComponent<MenuManagerScript>();
+        
         menuManagerScript.LoadLevel(100); //Loading the test level
-       
         gameManagerScript = menuManagerScript.GetGameInstance().GetComponent<GameManagerScript>();
     }
 
     [OneTimeTearDown]
-    public void OneTimeTearDown() 
+    public void OneTimeTearDown() //destroying the test objects after the test is complete
     {
         GameObject.Destroy(menuManagerScript.gameObject);
     }
 
     [UnityTest, Order(1)]
-    public IEnumerator CheckLoad()
+    public IEnumerator CheckLoad() //Checking the test level loaded the rider in the correct position
     {
-        Debug.Log("Check Load test");
         playerRiderScript = gameManagerScript.GetCurrentRider().GetComponent<PlayerRiderScript>();
 
         Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
@@ -41,12 +44,9 @@ public class CompleteRideTest
         yield return null; //yield to skip a frame.
     }
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
     [UnityTest, Order(2)]
     public IEnumerator CompleteRide()
     {
-        
         //move the rider to their end point
         for (int i = 0; i < 5; i++) 
         {
@@ -56,15 +56,14 @@ public class CompleteRideTest
         //the playerRider has changed so we need the new script
         playerRiderScript = gameManagerScript.GetCurrentRider().GetComponent<PlayerRiderScript>();
 
+        //checking that the new rider has been spawned in the right position
         Assert.AreEqual(playerRiderScript.GetXLocation(), 6);
         Assert.AreEqual(playerRiderScript.GetYLocation(), 5);
 
+        //checking that the replay rider has been spawned where the previous ride started
         Assert.AreEqual(gameManagerScript.GetRiders().ElementAt(0).GetComponent<RiderScript>().GetXLocation(), 5);
         Assert.AreEqual(gameManagerScript.GetRiders().ElementAt(0).GetComponent<RiderScript>().GetYLocation(), 8);
 
         yield return null;
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-
     }
 }

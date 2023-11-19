@@ -1,10 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/* Description: This is a test to check that the player cannot move into a space on the map where there is a wall.
+ *              The updateRider call to move into the wall should be rejected and the players position should 
+ *              remain the same.
+ */
 public class WallCollisionTest
 {
     GameManagerScript gameManagerScript;
@@ -12,9 +15,8 @@ public class WallCollisionTest
     PlayerRiderScript playerRiderScript;
 
     [OneTimeSetUp]
-    public void OneTimeSetup()
+    public void OneTimeSetup() //Setting up the test level
     {
-        Debug.Log("Test Setup");
         GameObject MenuManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Objects/MenuManager.prefab");
         menuManagerScript = GameObject.Instantiate(MenuManagerPrefab).GetComponent<MenuManagerScript>();
 
@@ -26,11 +28,16 @@ public class WallCollisionTest
     [UnityTest]
     public IEnumerator WallCollideTest()
     {
+        //moving the player down to where there is a wall below them 
         playerRiderScript.UpdateRider(Direction.Down);
         playerRiderScript.UpdateRider(Direction.Down);
+
+        //trying to move the player into the space where there's a wall
         playerRiderScript.UpdateRider(Direction.Down);
+
+        //there is a wall below (5,6) so the last MoveRider call should have not changed the riders position
         Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
-        Assert.AreEqual(playerRiderScript.GetYLocation(), 6); //there is a wall below (5,6) so the last MoveRider call should have not changed the riders position
+        Assert.AreEqual(playerRiderScript.GetYLocation(), 6);
 
         // Use yield to skip a frame.
         yield return null;

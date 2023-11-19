@@ -4,8 +4,6 @@ using UnityEngine;
 public class PlayerRiderScript : RiderScript
 {
     private List<TileType> ValidMoveTiles = new List<TileType> { TileType.Road, TileType.Spawn, TileType.Finish }; //a list of valid tile types that a player can move onto
-    
-    
 
     /* UpdateRider:
     * [direction] - The direction the rider should move in 

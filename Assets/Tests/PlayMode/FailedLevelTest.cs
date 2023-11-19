@@ -1,25 +1,25 @@
 using System.Collections;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
-using UnityEditor;
 
-/* Description: This is a test to check that the rider movement is functioning.
- *              It checks that movement in each direction has the correct effect 
- *              on a riders position in the game.
+/* Description: This is a test to check that the correct behaviour is seen when the game
+ *              end due to a collision. In this test the player rider is turned in a circle 
+ *              so they collide with their own trail. After this the menu is checked and 
+ *              if the game over menu is being displayed the test passes.
  */
-public class RiderMovement
+public class FailedLevelTest
 {
     GameManagerScript gameManagerScript;
     MenuManagerScript menuManagerScript;
     PlayerRiderScript playerRiderScript;
 
     [OneTimeSetUp]
-    public void OneTimeSetup()  //Setting up the test level
+    public void OneTimeSetup() //Setting up the test level
     {
         GameObject MenuManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Objects/MenuManager.prefab");
         menuManagerScript = GameObject.Instantiate(MenuManagerPrefab).GetComponent<MenuManagerScript>();
-        
         menuManagerScript.LoadLevel(100); //Loading the test level
         gameManagerScript = menuManagerScript.GetGameInstance().GetComponent<GameManagerScript>();
     }
@@ -29,7 +29,7 @@ public class RiderMovement
     {
         GameObject.Destroy(menuManagerScript.gameObject);
     }
-      
+
     [UnityTest, Order(1)]
     public IEnumerator CheckLoad() //Checking the test level loaded the rider in the correct position
     {
@@ -42,45 +42,17 @@ public class RiderMovement
     }
 
     [UnityTest, Order(2)]
-    public IEnumerator MoveUp()
+    public IEnumerator FailedLevel()
     {
+        //moving the rider in a circle so that they collide with their trail
+        playerRiderScript.UpdateRider(Direction.Right);
         playerRiderScript.UpdateRider(Direction.Up);
-
-        Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
-        Assert.AreEqual(playerRiderScript.GetYLocation(), 9);
-
-        yield return null;
-    }
-
-    [UnityTest, Order(3)]
-    public IEnumerator MoveDown()
-    {
+        playerRiderScript.UpdateRider(Direction.Left);
         playerRiderScript.UpdateRider(Direction.Down);
 
-        Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
-        Assert.AreEqual(playerRiderScript.GetYLocation(), 8);
-
-        yield return null;
-    }
-
-    [UnityTest, Order(4)]
-    public IEnumerator MoveRight()
-    {
-        playerRiderScript.UpdateRider(Direction.Right);
-
-        Assert.AreEqual(playerRiderScript.GetXLocation(), 6);
-        Assert.AreEqual(playerRiderScript.GetYLocation(), 8);
-
-        yield return null;
-    }
-
-    [UnityTest, Order(5)]
-    public IEnumerator MoveLeft()
-    {  
-        playerRiderScript.UpdateRider(Direction.Left);
-
-        Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
-        Assert.AreEqual(playerRiderScript.GetYLocation(), 8);
+        //checking that the game is not being played and that the GameOver menu is being displayed
+        Assert.AreEqual(gameManagerScript.GetPlayingState(), false);
+        Assert.AreEqual(menuManagerScript.GetUIController().transform.GetChild(2).GetComponent<GameOverScript>().isActiveAndEnabled, true);
 
         yield return null;
     }

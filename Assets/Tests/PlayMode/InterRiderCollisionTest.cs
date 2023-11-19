@@ -4,12 +4,10 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-
-/* Description: This is a test to check that the correct behaviour is seen when a level is completed.
- *              After all the rides in a level have been completed the game win screen should appear
- *              and the play state should turn to false.
+/* Description: This test checks that the correct behaviour is seen when a player makes their current rider
+ *              collide with one of their replay riders trails.
  */
-public class CompleteLevelTest
+public class InterRiderCollisionTest
 {
     GameManagerScript gameManagerScript;
     MenuManagerScript menuManagerScript;
@@ -20,8 +18,8 @@ public class CompleteLevelTest
     {
         GameObject MenuManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Objects/MenuManager.prefab");
         menuManagerScript = GameObject.Instantiate(MenuManagerPrefab).GetComponent<MenuManagerScript>();
+        
         menuManagerScript.LoadLevel(100); //Loading the test level
-
         gameManagerScript = menuManagerScript.GetGameInstance().GetComponent<GameManagerScript>();
     }
 
@@ -39,7 +37,7 @@ public class CompleteLevelTest
         Assert.AreEqual(playerRiderScript.GetXLocation(), 5);
         Assert.AreEqual(playerRiderScript.GetYLocation(), 8);
 
-        yield return null;
+        yield return null; //yield to skip a frame.
     }
 
     [UnityTest, Order(2)]
@@ -56,13 +54,15 @@ public class CompleteLevelTest
         //the playerRider has changed so we need the new script
         playerRiderScript = gameManagerScript.GetCurrentRider().GetComponent<PlayerRiderScript>();
 
-        for (int i = 0; i < 5; i++)
+        //moving the second rider up into the firsts trail
+        for (int i = 0; i < 3; i++)
         {
-            playerRiderScript.UpdateRider(Direction.Right);
+            playerRiderScript.UpdateRider(Direction.Up);
         }
 
+        //checking that the game is not playing anymore and that the GameOver menu is being displayed
         Assert.AreEqual(gameManagerScript.GetPlayingState(), false);
-        Assert.AreEqual(menuManagerScript.GetUIController().transform.GetChild(3).GetComponent<GameWinScript>().isActiveAndEnabled, true);
+        Assert.AreEqual(menuManagerScript.GetUIController().transform.GetChild(2).GetComponent<GameOverScript>().isActiveAndEnabled, true);
 
         yield return null;
     }
