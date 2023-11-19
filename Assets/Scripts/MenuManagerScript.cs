@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuManagerScript : MonoBehaviour
@@ -8,9 +6,10 @@ public class MenuManagerScript : MonoBehaviour
     [SerializeField] GameObject CanvasPrefab;
     [SerializeField] GameObject MainCamera;
 
-    private bool playingState;
+    private static MenuManagerScript Instance;
+
     private GameObject UIcontroller;
-    private int currentLevel;
+    static private int currentLevel;
 
     private GameObject gameManagerInstance;
     private GameObject mainCameraInstance;
@@ -21,15 +20,31 @@ public class MenuManagerScript : MonoBehaviour
     */
     void Awake()
     {
+        if (Instance == null) //singleton
+        {
+            Instance = this;
+            Debug.Log("Menu Manager awake");
+            UIcontroller = Instantiate(CanvasPrefab); //creating an instance of the CanvasPrefab (the CanvasPrefab is the parent of all the different menu screens)
+            UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive(); //set the main menu to active
 
-        Debug.Log("Menu Manager awake");
-        UIcontroller = Instantiate(CanvasPrefab); //creating an instance of the CanvasPrefab (the CanvasPrefab is the parent of all the different menu screens)
-        UIcontroller.transform.GetChild(0).GetComponent<MainMenuScript>().SetActive(); //set the main menu to active
-
-        mainCameraInstance = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation); //create the main camera
-
+            mainCameraInstance = Instantiate(MainCamera, new Vector3(4, (float)4.5, -10), transform.rotation); //create the main camera
+        }
+        else 
+        {
+            Destroy(Instance);
+        }
     }
-    
+
+    /* OnDestroy:
+    * Description: This method is called when the MenuManager object is destroyed. It destroys any of the objects that it created.
+    */
+    private void OnDestroy()
+    {
+        Destroy(gameManagerInstance);
+        Destroy(mainCameraInstance);
+        Destroy(UIcontroller);
+    }
+
     /* ShowGameOverMenu:
     * Description: This method turns on the Game Over screen so it is shown to the player
     */
@@ -52,6 +67,11 @@ public class MenuManagerScript : MonoBehaviour
      */
     public void LoadLevel(int levelNumber)
     {
+        if (gameManagerInstance != null) 
+        {
+            gameManagerInstance.SetActive(false); //Set to inactive so that when the new Board/riders try to look for a gameManager, they find the new one and not the old one)
+            Destroy(gameManagerInstance); //wipe the GameManager for that level and create a new one with the new level set
+        } 
         currentLevel = levelNumber;
         Debug.Log("Load level - " + levelNumber);
         UIcontroller.transform.GetChild(1).GetComponent<LevelSelectScript>().SetInactive(); // turning off the level select menu
@@ -123,6 +143,24 @@ public class MenuManagerScript : MonoBehaviour
         return currentLevel;
     }
 
+
+    /*  Test
+     * 
+     */
+    public GameObject GetGameInstance()
+    {
+        return gameManagerInstance;
+    }
+
+    /* GetUIController:
+     * Description: returns the UIcontroller. It's called in test scripts that need to find out what menu is currently being displayed
+     * 
+     */
+    public GameObject GetUIController() 
+    {
+        return UIcontroller;
+    }
+
     //Setters -------------------------
 
     /* SetPlayingState:
@@ -136,6 +174,5 @@ public class MenuManagerScript : MonoBehaviour
     {
         gameManagerInstance.GetComponent<GameManagerScript>().SetPlayingState(true);
     }
-
-   
+    
 }

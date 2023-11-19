@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileType
+public enum TileType //an enum to store all the possible tile types
 {
     Road,
     Wall,
@@ -24,20 +23,25 @@ public class TileScript : MonoBehaviour
     private TileType Ttype;
     private List<GameObject> ObjectList;
 
-
+    /* Awake:
+    * Description: This method is called when an object with this script attached is instantiated.
+    *              It initialises a list of objects that are on tile.
+    */
     void Awake()
     {
         ObjectList = new List<GameObject>();
-
     }
-    // Start is called before the first frame update
+    /* Start: 
+    * Description: This method is called on the first frame update after the tiles creation
+    *              The reason this code is not in awake is because tile type is set after the instantiation of a tile. 
+    *              at the point of Awake being called, tile type is yet to be set.
+    */
     void Start()
     {
         //Debug.Log("Tile Start ----------");
         if (Ttype == TileType.Road)
         {
             renderedTile = Instantiate(RoadPrefab, transform);
-
         }
         else if (Ttype == TileType.Wall)
         {

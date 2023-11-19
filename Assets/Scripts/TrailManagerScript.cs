@@ -1,3 +1,4 @@
+using PlasticGui.WorkspaceWindow;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -97,6 +98,14 @@ public class TrailManagerScript : MonoBehaviour
         }
     }
 
+    /* GetTrail:
+     * Description: Gets the list of trail pieces in this trail
+     * 
+     */
+    public List<GameObject> GetTrail() 
+    {
+        return riderTrail;
+    }
     /* SetColour:
      * Description: Sets the colour of the Trail manager (this colour is then passed on to the trail nodes when they are spawned in
      *              Called by RiderScript right after this TrailManager is created
@@ -115,6 +124,7 @@ public class TrailManagerScript : MonoBehaviour
     public void setRiderScript(GameObject rider)
     {
         riderScript = rider.GetComponent<RiderScript>();
+
         targetTrailLength = riderScript.GetTrailLength(); //retrieves the desired length of the trail from the rider
     }
 }
