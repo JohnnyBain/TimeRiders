@@ -107,7 +107,7 @@ public class RiderScript : MonoBehaviour
                 Debug.Log("Log: No direction");
                 break;
             default:
-                Debug.LogError("Error: Direction is not recognised as a valid");
+                Debug.LogError("Error: Not a valid direction");
                 break;
             
         }
@@ -166,6 +166,11 @@ public class RiderScript : MonoBehaviour
     public int GetTrailLength()
     {
         return trailLength;
+    }
+
+    public TrailManagerScript GetTrailManagerScript() 
+    {
+        return trailManagerScript;
     }
     public List<Direction> GetRoute()
     {
