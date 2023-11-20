@@ -21,3 +21,27 @@ have concluded, the routes will continue to play out.
 
 If the player crashes during a ride they can choose to restart the entire level (doing every delivery again), or they can replay just the ride they were playing when
 they crashed.
+
+Project composition:
+
+The Unity game engine works by attaching scripts to object within the gamespace
+If the script attached to an object extends the MonoBehaviour class it will have inherited methods that are called at certain points in the game loop
+	- (Awake) is called the moment an object with this script is instantiated
+	- (Start) is called on the first frame change that happens whilst this script is instantiated
+	- (Update) is called on every frame after that
+These Monobehaviour scripts are responsibility for the majority of my game logic (found in TimeRiders/Assets/Scripts)
+
+When a game is run in Unity, these three methods are called on any scripts that currently exist in the scene.
+My presaved scene begines with the MenuManagerScript on an instantiated object so this can be thought of as the main method.
+
+Although the MenuManager can be thought of as the main, the GameManagerScript is where all the in game computation happens. A GameManager 
+is created for each level that is played. The user chooses a level using the MenuManagers navigation (found in TimeRiders/Assets/Scripts/UI Scripts). 
+Once the game has begun, the user input is what drives the program (InputCheck() in GameManagerScript.cs)
+
+notes:
+
+Prefabricated objects are objects that already have scripts attached. So when I instantiate a PlayerRider prefab in the GameManagerScript
+it can largely be assumed that it has attached to it the playerRiderScript (because I have specified this in the unity editor). 
+
+A serialized variable are visible by the Unity editor. They can be observed and maniulated from within it. For example,
+timeDelay in GameManagerScript.cs, is set in the editor.
