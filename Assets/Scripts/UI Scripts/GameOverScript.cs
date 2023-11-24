@@ -10,20 +10,26 @@ public class GameOverScript : MonoBehaviour
     {
         MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
     }
-
     public void SetActive() 
     {
         gameObject.SetActive(true);
-        MMScript.SetPlayingState(false);
     }
-    public void RestartButton()
+    public void SetInactive()
     {
-        SceneManager.LoadScene("SampleScene");
+        gameObject.SetActive(false);
+        MMScript.SetPlayingState(true);
+    }
+    public void RestartLevelButton()
+    {
+        MMScript.RestartLevel();
     }
 
+    public void ReplayRiderButton() 
+    {
+        MMScript.ReplayRide();
+    }
     public void QuitButton() 
     {
         Application.Quit();
-        Debug.Log("Game is exiting");
     }
 }

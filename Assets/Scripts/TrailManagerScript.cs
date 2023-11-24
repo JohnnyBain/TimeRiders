@@ -1,3 +1,4 @@
+using PlasticGui.WorkspaceWindow;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,8 +18,8 @@ public class TrailManagerScript : MonoBehaviour
 
 
     /* Awake:
-     * This method is called the moment a trail manager is created
-     * It creates a reference to the tile array so that it can add and remove trail objects from the tiles as the trail moves
+     * Description: This method is called the moment a trail manager is created
+     *              It creates a reference to the tile array so that it can add and remove trail objects from the tiles as the trail moves
      */
     void Awake()
     {
@@ -27,7 +28,7 @@ public class TrailManagerScript : MonoBehaviour
     }
 
     /* OnDestroy:
-     * A method that destroys all the trail objects (nodes) that make up the rider trail when the trail manager is destroyed
+     * Description: A method that destroys all the trail objects (nodes) that make up the rider trail when the trail manager is destroyed
      */
     private void OnDestroy()
     {
@@ -38,9 +39,9 @@ public class TrailManagerScript : MonoBehaviour
     }
 
     /* ManageTrail:
-     * This method is called from RiderScript every time that rider makes a move.
-     * It checks whether the trail has reached it's max length and either moves the existing trail pieces or adds a new one accordingly
-     * Crucially the ManageTrail function is called right before the rider is moved
+     * Description: This method is called from RiderScript every time that rider makes a move.
+     *              It checks whether the trail has reached it's max length and either moves the existing trail pieces or adds a new one accordingly
+     *              Crucially the ManageTrail function is called right before the rider is moved
      */
     public void ManageTrail()
     {
@@ -54,10 +55,8 @@ public class TrailManagerScript : MonoBehaviour
         }
     }
 
-
-
     /* AddTrail:
-     * Creates a new trail where the rider just was. The trail node is added to the tile array
+     * Description: Creates a new trail where the rider just was. The trail node is added to the tile array
      */
     private void AddTrail()
     {
@@ -68,7 +67,7 @@ public class TrailManagerScript : MonoBehaviour
     }
 
     /* MoveTrail:
-     * Moves the trail pieces shifting them all up by one. The first piece is moved to where the rider was and the rest shuffle up.
+     * Description: Moves the trail pieces shifting them all up by one. The first piece is moved to where the rider was and the rest shuffle up.
      */
     private void MoveTrail()
     {
@@ -88,7 +87,7 @@ public class TrailManagerScript : MonoBehaviour
     }
 
     /* PrintTrail:
-     * Prints the [x,y] location of each trail node currently in the Riders trail 
+     * Description: Prints the [x,y] location of each trail node currently in the Riders trail 
      */
     private void PrintTrail()
     {
@@ -99,9 +98,17 @@ public class TrailManagerScript : MonoBehaviour
         }
     }
 
+    /* GetTrail:
+     * Description: Gets the list of trail pieces in this trail
+     * 
+     */
+    public List<GameObject> GetTrail() 
+    {
+        return riderTrail;
+    }
     /* SetColour:
-     * Sets the colour of the Trail manager (this colour is then passed on to the trail nodes when they are spawned in
-     * Called by RiderScript right after this TrailManager is created
+     * Description: Sets the colour of the Trail manager (this colour is then passed on to the trail nodes when they are spawned in
+     *              Called by RiderScript right after this TrailManager is created
      */
     public void SetColour(Color32 c) 
     {
@@ -109,14 +116,15 @@ public class TrailManagerScript : MonoBehaviour
     }
 
     /* SetRiderScript:
-     * rider - The Rider GameObject from which this trail manager was created and should be connected to
+     * [rider] - The Rider GameObject from which this trail manager was created and should be connected to
      * 
-     * Sets the RiderScript member variable to a RiderScript
-     * It's called in RiderScript right after the creation of the trail manager to assign a rider to the trail manager just created
+     * Description: Sets the RiderScript member variable to a RiderScript
+     *              It's called in RiderScript right after the creation of the trail manager to assign a rider to the trail manager just created
      */
     public void setRiderScript(GameObject rider)
     {
         riderScript = rider.GetComponent<RiderScript>();
+
         targetTrailLength = riderScript.GetTrailLength(); //retrieves the desired length of the trail from the rider
     }
 }

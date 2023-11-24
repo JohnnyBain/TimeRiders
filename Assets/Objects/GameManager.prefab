@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c93acd3cee545b844aadf8a7efe47d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainCamera: {fileID: 4520854703993004528, guid: 8da5b95c46cff3749a08864618fa54b0, type: 3}
-  RiderPrefab: {fileID: 6195768096863760953, guid: 48b2e12bad795824ab517983aaddc93d, type: 3}
+  ReplayRiderPrefab: {fileID: 6195768096863760953, guid: 48b2e12bad795824ab517983aaddc93d, type: 3}
+  PlayerRiderPrefab: {fileID: 6195768096863760953, guid: 64149bf83a3f8354daadb27e3d9706e2, type: 3}
   GameBoardPrefab: {fileID: 1507755248739912524, guid: 27485344649a49d4b9e1ebf07e7c6c77, type: 3}
   CanvasPrefab: {fileID: 2393846259156420843, guid: a279040ce18b70e429edb1dc0d1255ba, type: 3}
   Colours:
