@@ -56,11 +56,12 @@ public class GameBoardScript : MonoBehaviour
         {
             string readFromFilePath = Application.streamingAssetsPath + "/TextFiles/" + "Level " + levelToLoad.ToString() + ".txt"; //loads the contents of the level file into a string
             List<string> fileLines = File.ReadAllLines(readFromFilePath).ToList(); //loads each line from the file into a string within a list 
-            BoardHeight = fileLines.First().Length; //the board is always square so the length of the first string in the list will also be the length of the list
             
+            BoardHeight = fileLines.First().Length; //the board is always square so the length of the first string in the list will also be the length of the list
             BoardWidth = fileLines.Count();
             Debug.Log("BoardHeight = " + BoardHeight);
             Debug.Log("BoardWidth = " + BoardWidth);
+
             TileArray = new GameObject[BoardWidth, BoardHeight]; //initialising the Tile board using the board size 
             menuManagerScript.ResetCamera(((float)(BoardWidth))/2,((float)(BoardHeight))/2);
             for (int i = 0; i < BoardWidth; i++) //traversing each line loaded from the file

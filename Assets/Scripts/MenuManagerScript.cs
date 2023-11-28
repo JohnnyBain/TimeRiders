@@ -9,7 +9,7 @@ public class MenuManagerScript : MonoBehaviour
     private static MenuManagerScript Instance;
 
     private GameObject UIcontroller;
-    static private int currentLevel;
+    private int currentLevel; 
 
     private GameObject gameManagerInstance;
     private GameObject mainCameraInstance;
@@ -31,7 +31,7 @@ public class MenuManagerScript : MonoBehaviour
         }
         else 
         {
-            Destroy(Instance);
+            Destroy(gameObject);
         }
     }
 

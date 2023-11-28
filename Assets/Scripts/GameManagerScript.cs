@@ -69,8 +69,6 @@ public class GameManagerScript : MonoBehaviour
         {
             if (isRiderDone[currentRider - 1] == RiderStatus.Complete) //if the current rider is complete (automatically replay the ReplayRiders)
             {
-                time = time + 1f * Time.deltaTime;
-                //Debug.Log(time);
                 if (time >= timeDelay) //time Delay = the time between each automatic step of the replay riders
                 {
                     time = 0f;
@@ -175,7 +173,6 @@ public class GameManagerScript : MonoBehaviour
                 //else if the tile is a finish tile, check if this tile is for the current rider, check if there's a rider on it 
                 else if (t.GetComponent<TileScript>().GetTileType() == TileType.Finish && t.GetComponent<TileScript>().GetObjectList().Contains(currentRiderInstance) && t.GetComponent<TileScript>().GetRiderID() == currentRider) 
                 {
-                    List<Direction> route = currentRiderInstance.GetComponent<RiderScript>().GetRoute();
                     isRiderDone[currentRider - 1] = RiderStatus.Complete;
                 }
             }  
