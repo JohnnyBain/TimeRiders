@@ -61,6 +61,11 @@ public class MenuManagerScript : MonoBehaviour
         UIcontroller.transform.GetChild(3).GetComponent<GameWinScript>().SetActive();
     }
 
+    public void ShowCompletedRideMenu() 
+    {
+        UIcontroller.transform.GetChild(4).GetComponent<CompleteRideScript>().SetActive();
+    }
+
     /* LoadLevel:
      * Description: This method creates the game manager instance after setting the level (the game manager then fetches the level that it needs to load
      * 
@@ -132,6 +137,20 @@ public class MenuManagerScript : MonoBehaviour
         Destroy(mainCameraInstance);
         mainCameraInstance = Instantiate(MainCamera, new Vector3(x - 0.5f, y - 0.5f, -10), transform.rotation);
     }
+
+    /* SelectRider:
+     * [riderID] - the riderID that the user would like to select and play next
+     * 
+     * Description: This is called by the CompleteRideScript. After a ride is complete or at the start of the level, the user is 
+     *              given the choice as to which ride they would like to play next. This method is called from the menu presented to the 
+     *              user and sets the GameManagers currentRider based off of the integer parameter
+     */
+    public void SelectRider(int riderID) 
+    {
+        gameManagerInstance.GetComponent<GameManagerScript>().SelectRider(riderID);
+        UIcontroller.transform.GetChild(4).GetComponent<CompleteRideScript>().SetInactive(); //turning off the SelectRider menu
+    }
+
     //Getters -------------------------
 
     /* GetCurrentLevel:

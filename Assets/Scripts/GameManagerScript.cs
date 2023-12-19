@@ -49,6 +49,15 @@ public class GameManagerScript : MonoBehaviour
 
         allRiders = new GameObject[numberOfRiders]; //creates the list that will hold each of the rider (current & replays)
 
+        
+
+    }
+
+    private void Start()
+    {
+        playingState = false;
+        menuManagerScript.ShowCompletedRideMenu();
+
         InitaliseRiders(); //creates the riders needed for this first ride (naturally will only ever be one)
         numberOfRiders = gameBoardScript.GetRiderCount(); //creates a reference for the rider count for this class
     }
@@ -69,6 +78,7 @@ public class GameManagerScript : MonoBehaviour
         {
             if (isRiderDone[currentRider - 1] == RiderStatus.Complete) //if the current rider is complete (automatically replay the ReplayRiders)
             {
+                time = time + 1f * Time.deltaTime;
                 if (time >= timeDelay) //time Delay = the time between each automatic step of the replay riders
                 {
                     time = 0f;
@@ -191,14 +201,16 @@ public class GameManagerScript : MonoBehaviour
         if (!isRiderDone.Contains(RiderStatus.Riding)) //if there are no riders still riding
         {
             routes[currentRider - 1] = (currentRiderScript.GetRoute()); //save the players route into the routes array
-            if (currentRider == numberOfRiders) //If this is the final rider
+            if (!routes.Contains(null)) //If this is the final rider
             {
                 GameWin();
             }
             else //Another ride is still to complete so clear restart the level on the next rider
             {
-                currentRider++;
-                StartRiders();
+                playingState = false;
+                menuManagerScript.ShowCompletedRideMenu();
+                //currentRider++;
+                //StartRiders();
             }
         }
     }
@@ -213,6 +225,18 @@ public class GameManagerScript : MonoBehaviour
         gameBoardScript.ClearTileLists(); //wipes the object lists each tile holds
         DestroyRiders();
         InitaliseRiders(); //Initalises the riders again (this time with a new replay rider that uses the route saved above)
+    }
+
+    /* SelectedRider:
+     * Description: A method called by the menu manager that sets the current rider to what the player has selected. It also
+     *              sets the playing state to true and re-initialises the riders with the new currentRider.
+     * 
+     */
+    public void SelectRider(int riderID) 
+    {
+        SetCurrentRider(riderID);
+        StartRiders();
+        playingState = true;
     }
 
     /* InputCheck:
@@ -326,5 +350,10 @@ public class GameManagerScript : MonoBehaviour
     public void SetPlayingState(bool playing) 
     {
         playingState = playing;
+    }
+
+    public void SetCurrentRider(int riderID) 
+    {
+        currentRider = riderID;
     }
 }
