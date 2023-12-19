@@ -69,6 +69,7 @@ public class GameManagerScript : MonoBehaviour
         {
             if (isRiderDone[currentRider - 1] == RiderStatus.Complete) //if the current rider is complete (automatically replay the ReplayRiders)
             {
+                time = time + 1f * Time.deltaTime;
                 if (time >= timeDelay) //time Delay = the time between each automatic step of the replay riders
                 {
                     time = 0f;
