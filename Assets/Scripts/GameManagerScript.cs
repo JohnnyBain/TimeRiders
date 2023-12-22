@@ -235,6 +235,7 @@ public class GameManagerScript : MonoBehaviour
     public void SelectRider(int riderID) 
     {
         SetCurrentRider(riderID);
+        routes[riderID - 1] = null;
         StartRiders();
         playingState = true;
     }
@@ -276,7 +277,7 @@ public class GameManagerScript : MonoBehaviour
     {
         for (int i = 0; i < numberOfRiders; i++)
         {
-            if (routes[i] != null) //if this rider has a route and therefor is a replay rider
+            if (routes[i] != null) //if this rider has a route and therefore is a replay rider
             {
                 if (routes[i].Count > turnCount) //if the rider has more moves to execute
                 {
