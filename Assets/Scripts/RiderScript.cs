@@ -41,7 +41,7 @@ public class RiderScript : MonoBehaviour
     * Description: This method is called on the first frame update after the riders creation
     *              The reason this code is not in awake is because after a rider is instantiated it's passed it's location through the SetLocation method
     */
-    private void Start()
+    protected virtual void Start()
     {
         gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray()[xLocation, yLocation].GetComponent<TileScript>().AddObject(gameObject); //adds this rider to the tile that it was spawned at
         trailManagerInstance = Instantiate(TrailManagerPrefab, transform.position, transform.rotation);// create trail manager with this riders current location and rotation
@@ -120,7 +120,7 @@ public class RiderScript : MonoBehaviour
      * 
      * Description: This method creates a Vector3 to be added to the riders current transform based on what direction it is trying to go in
      */
-    private Vector3 ToVector3(Direction direction) 
+    protected Vector3 ToVector3(Direction direction) 
     {
         Vector3 directionVector = new Vector3(0, 0, 0); ;
         switch (direction)
