@@ -55,7 +55,7 @@ public class RiderScript : MonoBehaviour
      * Description: This method destroys the trail manager associated with a rider when the rider is destroyed
      *              It is called when all the riders have finished and need to be reset
      */
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         Destroy(trailManagerInstance);
     }

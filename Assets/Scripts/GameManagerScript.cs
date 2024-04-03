@@ -155,6 +155,7 @@ public class GameManagerScript : MonoBehaviour
                             replayRider.GetComponent<ReplayRiderScript>().SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list
                             isRiderDone[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] = RiderStatus.Riding; //set this riders status to riding
                             allRiders[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] = replayRider; //add this rider to the list of riders in the game space
+                            replayRider.GetComponent<ReplayRiderScript>().InitialiseGhostRider(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1);
                         }
                     }
                 }
@@ -286,6 +287,10 @@ public class GameManagerScript : MonoBehaviour
                     {
                         isRiderDone[i] = RiderStatus.Complete; //set this riders status to complete
                     }
+                    else 
+                    {
+                        allRiders[i].GetComponent<ReplayRiderScript>().UpdateGhostPointerRider(routes[i].ElementAt(turnCount+1));
+                    }
                 }
             }
         }
@@ -346,6 +351,11 @@ public class GameManagerScript : MonoBehaviour
     public bool GetPlayingState() 
     {
         return playingState;
+    }
+
+    public List<Direction>[] GetRoutes() 
+    {
+        return routes;
     }
     //Setters ----------------------
     public void SetPlayingState(bool playing) 
