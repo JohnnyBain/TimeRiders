@@ -287,9 +287,9 @@ public class GameManagerScript : MonoBehaviour
                     {
                         isRiderDone[i] = RiderStatus.Complete; //set this riders status to complete
                     }
-                    else 
+                    else //if it's not the last move, update the Ghost pointer
                     {
-                        allRiders[i].GetComponent<ReplayRiderScript>().UpdateGhostPointerRider(routes[i].ElementAt(turnCount+1));
+                        allRiders[i].GetComponent<ReplayRiderScript>().UpdateGhostPointerRider(routes[i].ElementAt(turnCount+1)); //move to the pointer to its next position
                     }
                 }
             }
