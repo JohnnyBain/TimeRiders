@@ -49,6 +49,15 @@ public class GameManagerScript : MonoBehaviour
 
         allRiders = new GameObject[numberOfRiders]; //creates the list that will hold each of the rider (current & replays)
 
+        
+
+    }
+
+    private void Start()
+    {
+        playingState = false;
+        menuManagerScript.ShowCompletedRideMenu();
+
         InitaliseRiders(); //creates the riders needed for this first ride (naturally will only ever be one)
         numberOfRiders = gameBoardScript.GetRiderCount(); //creates a reference for the rider count for this class
     }
@@ -146,6 +155,7 @@ public class GameManagerScript : MonoBehaviour
                             replayRider.GetComponent<ReplayRiderScript>().SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list
                             isRiderDone[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] = RiderStatus.Riding; //set this riders status to riding
                             allRiders[tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1] = replayRider; //add this rider to the list of riders in the game space
+                            replayRider.GetComponent<ReplayRiderScript>().InitialiseGhostRider(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1);
                         }
                     }
                 }
@@ -192,14 +202,16 @@ public class GameManagerScript : MonoBehaviour
         if (!isRiderDone.Contains(RiderStatus.Riding)) //if there are no riders still riding
         {
             routes[currentRider - 1] = (currentRiderScript.GetRoute()); //save the players route into the routes array
-            if (currentRider == numberOfRiders) //If this is the final rider
+            if (!routes.Contains(null)) //If this is the final rider
             {
                 GameWin();
             }
             else //Another ride is still to complete so clear restart the level on the next rider
             {
-                currentRider++;
-                StartRiders();
+                playingState = false;
+                menuManagerScript.ShowCompletedRideMenu();
+                //currentRider++;
+                //StartRiders();
             }
         }
     }
@@ -214,6 +226,19 @@ public class GameManagerScript : MonoBehaviour
         gameBoardScript.ClearTileLists(); //wipes the object lists each tile holds
         DestroyRiders();
         InitaliseRiders(); //Initalises the riders again (this time with a new replay rider that uses the route saved above)
+    }
+
+    /* SelectedRider:
+     * Description: A method called by the menu manager that sets the current rider to what the player has selected. It also
+     *              sets the playing state to true and re-initialises the riders with the new currentRider.
+     * 
+     */
+    public void SelectRider(int riderID) 
+    {
+        SetCurrentRider(riderID);
+        routes[riderID - 1] = null;
+        StartRiders();
+        playingState = true;
     }
 
     /* InputCheck:
@@ -253,7 +278,7 @@ public class GameManagerScript : MonoBehaviour
     {
         for (int i = 0; i < numberOfRiders; i++)
         {
-            if (routes[i] != null) //if this rider has a route and therefor is a replay rider
+            if (routes[i] != null) //if this rider has a route and therefore is a replay rider
             {
                 if (routes[i].Count > turnCount) //if the rider has more moves to execute
                 {
@@ -261,6 +286,10 @@ public class GameManagerScript : MonoBehaviour
                     if (routes[i].Count == turnCount + 1) //if this is the last move
                     {
                         isRiderDone[i] = RiderStatus.Complete; //set this riders status to complete
+                    }
+                    else //if it's not the last move, update the Ghost pointer
+                    {
+                        allRiders[i].GetComponent<ReplayRiderScript>().UpdateGhostPointerRider(routes[i].ElementAt(turnCount+1)); //move to the pointer to its next position
                     }
                 }
             }
@@ -323,9 +352,19 @@ public class GameManagerScript : MonoBehaviour
     {
         return playingState;
     }
+
+    public List<Direction>[] GetRoutes() 
+    {
+        return routes;
+    }
     //Setters ----------------------
     public void SetPlayingState(bool playing) 
     {
         playingState = playing;
+    }
+
+    public void SetCurrentRider(int riderID) 
+    {
+        currentRider = riderID;
     }
 }

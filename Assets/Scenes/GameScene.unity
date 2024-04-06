@@ -242,6 +242,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1448665015771458115, guid: 234d50e56f7c0ad43ab08b67c9facd17, type: 3}
+      propertyPath: CanvasPrefab
+      value: 
+      objectReference: {fileID: 2393846259156420843, guid: a279040ce18b70e429edb1dc0d1255ba, type: 3}
     - target: {fileID: 1448665015771458124, guid: 234d50e56f7c0ad43ab08b67c9facd17, type: 3}
       propertyPath: m_Name
       value: MenuManager

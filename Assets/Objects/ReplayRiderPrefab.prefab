@@ -138,3 +138,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrailManagerPrefab: {fileID: 669338876355415096, guid: 726ece082366ec54cade99c8a5090d7d, type: 3}
   trailLength: 6
+  GhostPointerPrefab: {fileID: 4848438778961740235, guid: 23f9137e98591ad4ea8357b369d6b21a, type: 3}

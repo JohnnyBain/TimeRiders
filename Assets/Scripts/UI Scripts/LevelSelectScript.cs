@@ -12,20 +12,10 @@ public class LevelSelectScript : MonoBehaviour
         MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void LoadLevel() 
     {
         MMScript.LoadLevel(level);
         //gameObject.SetActive(false); //deactives the button, not the screen
-    }
-    public void LevelOneButtonPress() 
-    {
-        
     }
 
     public void BackButtonPress() 
