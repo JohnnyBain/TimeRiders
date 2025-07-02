@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
-using XDiffGui;
+
 
 public class ReplayRiderScript : RiderScript
 {
@@ -55,7 +52,7 @@ public class ReplayRiderScript : RiderScript
 
     }
 
-    private void OnDestroy()
+    private new void OnDestroy()
     {
         Destroy(GhostPointerInstance);
         base.OnDestroy();

@@ -49,10 +49,13 @@ public class CompleteLevelTest
         for (int i = 0; i < 5; i++)
         {
             playerRiderScript.UpdateRider(Direction.Right);
+            
         }
 
         yield return null; //we need to yield here so that the new riders start methods have run before we access them
 
+
+        //The reason this test is now failing is because of the rider select UI update (the rider is not automatically incremented to the next
         //the playerRider has changed so we need the new script
         playerRiderScript = gameManagerScript.GetCurrentRider().GetComponent<PlayerRiderScript>();
 
