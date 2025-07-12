@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 93904193298846c409c3e2135074d726
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - RiderSelectorPrefab: {fileID: 284847852013739036, guid: 33464f3c2dfe8d64d813ba5add1c1c03, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

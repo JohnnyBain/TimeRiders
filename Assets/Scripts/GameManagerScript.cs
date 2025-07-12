@@ -48,9 +48,6 @@ public class GameManagerScript : MonoBehaviour
         CreateBoardInstance();// creates the board (the board fetches the level it should be creating from the MenuManagerScript
 
         allRiders = new GameObject[numberOfRiders]; //creates the list that will hold each of the rider (current & replays)
-
-        
-
     }
 
     private void Start()
@@ -60,6 +57,7 @@ public class GameManagerScript : MonoBehaviour
 
         InitaliseRiders(); //creates the riders needed for this first ride (naturally will only ever be one)
         numberOfRiders = gameBoardScript.GetRiderCount(); //creates a reference for the rider count for this class
+        menuManagerScript.GenerateRiderSelectorMenu();
     }
 
     /* Update:
@@ -142,7 +140,7 @@ public class GameManagerScript : MonoBehaviour
                         currentRiderInstance = Instantiate(PlayerRiderPrefab, new Vector3(i, j, 0), transform.rotation); //create current rider 
                         currentRiderScript = currentRiderInstance.GetComponent<PlayerRiderScript>(); //create a reference for the script of the created rider 
                         currentRiderScript.SetLocation(i, j); //set the riders location to that of the tile it was spawned on
-                        currentRiderScript.SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list
+                        currentRiderScript.SetColour(Colours.ElementAt(tileArray[i, j].GetComponent<TileScript>().GetRiderID() - 1)); //set the colour of the rider based on it's RiderID (this id corresponds to a colour in the Colours list)
                         isRiderDone[currentRider - 1] = RiderStatus.Riding; //set this riders status to riding
                         allRiders[currentRider - 1] = currentRiderInstance; //add this rider to the list of riders in the game space
                     }
@@ -333,6 +331,10 @@ public class GameManagerScript : MonoBehaviour
         return allRiders;
     }
 
+    public int GetNumberOfRiders() 
+    {
+        return numberOfRiders;
+    }
     public GameObject GetCurrentRider()
     {
         return currentRiderInstance;

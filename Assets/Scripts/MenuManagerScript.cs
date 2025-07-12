@@ -63,7 +63,7 @@ public class MenuManagerScript : MonoBehaviour
 
     public void ShowCompletedRideMenu() 
     {
-        UIcontroller.transform.GetChild(4).GetComponent<CompleteRideScript>().SetActive();
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetActive();
     }
 
     /* LoadLevel:
@@ -128,7 +128,6 @@ public class MenuManagerScript : MonoBehaviour
      *              After the file has been loaded in, the dimensions are processed and 
      *              this method is passed the coordinates to spawn the camera. 
      *              The location is offset by 0.5 because tile {0,0} is the center of the first tile, not the bottom left corner
-     * 
      */
     public void ResetCamera(float x, float y)
     {
@@ -148,8 +147,14 @@ public class MenuManagerScript : MonoBehaviour
     public void SelectRider(int riderID) 
     {
         gameManagerInstance.GetComponent<GameManagerScript>().SelectRider(riderID);
-        UIcontroller.transform.GetChild(4).GetComponent<CompleteRideScript>().SetInactive(); //turning off the SelectRider menu
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetInactive(); //turning off the SelectRider menu
     }
+
+    public void GenerateRiderSelectorMenu() 
+    {
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().GenerateMenu(); //generate a rider selector menu for this level
+    }
+
 
     //Getters -------------------------
 

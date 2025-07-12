@@ -11,9 +11,7 @@ public class MainMenuScript : MonoBehaviour
     void Awake()
     {
         MMScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
-
         gameObject.SetActive(true);
-       
     }
 
     public void LevelSelectButton()
