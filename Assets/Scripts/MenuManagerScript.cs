@@ -116,8 +116,8 @@ public class MenuManagerScript : MonoBehaviour
     public void ReplayRide() 
     {
         UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetInactive();
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetActive();
         gameManagerInstance.GetComponent<GameManagerScript>().StartRiders();
-        SetPlayingState(true);
     }
 
     /* ResetCamera:
@@ -148,6 +148,7 @@ public class MenuManagerScript : MonoBehaviour
     {
         gameManagerInstance.GetComponent<GameManagerScript>().SelectRider(riderID);
         UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetInactive(); //turning off the SelectRider menu
+        SetPlayingState(true);
     }
 
     public void GenerateRiderSelectorMenu() 

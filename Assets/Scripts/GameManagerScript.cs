@@ -32,7 +32,7 @@ public class GameManagerScript : MonoBehaviour
     private int currentRider = 1; // determines which rider the player is currently in control of
     private int turnCount = 0;
     private float time = 0f;
-    private bool playingState = true;
+    [SerializeField] private bool playingState = true;
     [SerializeField] float timeDelay; //Seconds between each automatic step of the replay riders
 
 

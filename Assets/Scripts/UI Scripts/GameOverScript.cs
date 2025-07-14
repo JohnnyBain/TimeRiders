@@ -17,7 +17,6 @@ public class GameOverScript : MonoBehaviour
     public void SetInactive()
     {
         gameObject.SetActive(false);
-        MMScript.SetPlayingState(true);
     }
     public void RestartLevelButton()
     {
