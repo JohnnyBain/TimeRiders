@@ -14,7 +14,7 @@ public class RiderSelectorScript : MonoBehaviour
     {
         mainMenuScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManagerScript>();
         gameManagerScript = mainMenuScript.GetGameInstance().GetComponent<GameManagerScript>();
-        gameObject.GetComponentInChildren<TMP_Text>().text = riderId.ToString();
+        //gameObject.GetComponentInChildren<TMP_Text>().text = riderId.ToString(); //sets a number on the button
     }
 
     //Set the selector's button colour (with a slightly darkened colour for the buttons interaction states
@@ -38,5 +38,17 @@ public class RiderSelectorScript : MonoBehaviour
     public void SelectRider()
     {
         mainMenuScript.SelectRider(riderId);
+    }
+
+    public void changeSprite(bool isFull) 
+    {
+        if (isFull)
+        {
+            gameObject.GetComponent<Image>().fillCenter = true;
+        }
+        else
+        {
+            gameObject.GetComponent<Image>().fillCenter = false;
+        }
     }
 }

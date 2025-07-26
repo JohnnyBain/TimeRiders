@@ -66,6 +66,10 @@ public class MenuManagerScript : MonoBehaviour
         UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetActive();
     }
 
+    public void SetRiderSelectorState(int riderId, bool isFull)
+    {
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetSelectorState(riderId,isFull);
+    }
     /* LoadLevel:
      * Description: This method creates the game manager instance after setting the level (the game manager then fetches the level that it needs to load
      * 

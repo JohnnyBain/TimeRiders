@@ -196,7 +196,6 @@ public class GameManagerScript : MonoBehaviour
      */
     public void GameWinCheck()
     {
-
         if (!isRiderDone.Contains(RiderStatus.Riding)) //if there are no riders still riding
         {
             routes[currentRider - 1] = (currentRiderScript.GetRoute()); //save the players route into the routes array
@@ -207,9 +206,8 @@ public class GameManagerScript : MonoBehaviour
             else //Another ride is still to complete so clear restart the level on the next rider
             {
                 playingState = false;
+                menuManagerScript.SetRiderSelectorState(currentRider - 1, true);
                 menuManagerScript.ShowCompletedRideMenu();
-                //currentRider++;
-                //StartRiders();
             }
         }
     }
@@ -313,6 +311,7 @@ public class GameManagerScript : MonoBehaviour
     public void GameOver()
     {
         playingState = false;
+        menuManagerScript.SetRiderSelectorState(currentRider - 1, false);
         menuManagerScript.ShowGameOverMenu();
         
     }
