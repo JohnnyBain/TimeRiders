@@ -57,6 +57,8 @@ public class RiderScript : MonoBehaviour
      */
     protected void OnDestroy()
     {
+        GameObject[,] TileArray = gameBoardInstance.GetComponent<GameBoardScript>().GetTileArray();
+        TileArray[xLocation, yLocation].GetComponent<TileScript>().RemoveObject(gameObject);
         Destroy(trailManagerInstance);
     }
 

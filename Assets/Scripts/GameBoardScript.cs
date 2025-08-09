@@ -144,6 +144,17 @@ public class GameBoardScript : MonoBehaviour
         }
     }
 
+    /* RemoveRiderFromTiles:
+     * Description: Removes a specific rider from all the tiles
+     */
+    public void RemoveRiderFromTiles()
+    {
+        foreach (GameObject tile in TileArray)
+        {
+            tile.GetComponent<TileScript>().ClearObjectList();
+        }
+    }
+
     //Getters ------------------------
     public GameObject[,] GetTileArray() 
     {

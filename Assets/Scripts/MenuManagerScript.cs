@@ -51,6 +51,7 @@ public class MenuManagerScript : MonoBehaviour
     public void ShowGameOverMenu() 
     {
         UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetActive();
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetInactive(); //turning off the SelectRider menu
     }
 
     /* ShowGameWinMenu:
@@ -59,11 +60,13 @@ public class MenuManagerScript : MonoBehaviour
     public void ShowGameWinMenu() 
     {
         UIcontroller.transform.GetChild(3).GetComponent<GameWinScript>().SetActive();
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetInactive(); //turning off the SelectRider menu
     }
 
     public void ShowCompletedRideMenu() 
     {
         UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetActive();
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetRiderSelectorMenuState(RiderSelectorMenuState.SelectRide);
     }
 
     public void SetRiderSelectorState(int riderId, bool isFull)
@@ -121,6 +124,7 @@ public class MenuManagerScript : MonoBehaviour
     {
         UIcontroller.transform.GetChild(2).GetComponent<GameOverScript>().SetInactive();
         UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetActive();
+        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetRiderSelectorMenuState(RiderSelectorMenuState.SelectRide);
         gameManagerInstance.GetComponent<GameManagerScript>().StartRiders();
     }
 
@@ -151,7 +155,6 @@ public class MenuManagerScript : MonoBehaviour
     public void SelectRider(int riderID) 
     {
         gameManagerInstance.GetComponent<GameManagerScript>().SelectRider(riderID);
-        UIcontroller.transform.GetChild(4).GetComponent<RiderSelectMenuScript>().SetInactive(); //turning off the SelectRider menu
         SetPlayingState(true);
     }
 

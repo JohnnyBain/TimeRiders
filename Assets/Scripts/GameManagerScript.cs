@@ -53,11 +53,12 @@ public class GameManagerScript : MonoBehaviour
     private void Start()
     {
         playingState = false;
-        menuManagerScript.ShowCompletedRideMenu();
+        
 
         InitaliseRiders(); //creates the riders needed for this first ride (naturally will only ever be one)
         numberOfRiders = gameBoardScript.GetRiderCount(); //creates a reference for the rider count for this class
         menuManagerScript.GenerateRiderSelectorMenu();
+        menuManagerScript.ShowCompletedRideMenu();
     }
 
     /* Update:
@@ -96,8 +97,8 @@ public class GameManagerScript : MonoBehaviour
      */
     public void OnDestroy() 
     {
-        Destroy(gameBoardInstance);
         DestroyRiders();
+        Destroy(gameBoardInstance);
     }
 
     /* CreateBoardInstance:
@@ -303,6 +304,27 @@ public class GameManagerScript : MonoBehaviour
         {
             Destroy(rider); //Destroys the rider and calls the OnDestroy method within the Rider script
         }
+    }
+    /* DestroyRider:
+     * Description: Destroys a specified rider object that are currently in the level
+     *              
+     */
+    private void DestroyRider(int riderId)
+    {
+        Destroy(allRiders.ElementAt(riderId-1));
+    }
+
+
+    /* RemoveRider:
+     * Description: Removes a single ride from a game as it's being played. Triggered by a player using the rider selectore menu
+     * 
+     */
+    public void RemoveRider(int riderId) 
+    {
+        //remove rider from all the tile squares
+        routes[riderId-1] = null;
+        isRiderDone[riderId - 1] = RiderStatus.Waiting;
+        DestroyRider(riderId);
     }
 
     /* GameOver:

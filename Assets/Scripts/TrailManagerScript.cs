@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 
 public class TrailManagerScript : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class TrailManagerScript : MonoBehaviour
     {
         foreach (GameObject trailNode in riderTrail) 
         {
+            TrailScript trailNodeScript = trailNode.GetComponent<TrailScript>();
+            tileArray[trailNodeScript.getXLocation(), trailNodeScript.getYLocation()].GetComponent<TileScript>().RemoveObject(trailNode);//removes the trails from the game board tile lists
             Destroy(trailNode);
         }
     }
@@ -61,8 +64,10 @@ public class TrailManagerScript : MonoBehaviour
     {
         GameObject trail = Instantiate(Trail, new Vector3(riderScript.GetXLocation(), riderScript.GetYLocation(), 0), transform.rotation); //creates a trail node where the rider currently is (before it has moved to the new location)
         trail.GetComponent<SpriteRenderer>().color = colour; //sets the trail nodes colour to the same as the trail manager's
+        trail.GetComponent<TrailScript>().setLocation(riderScript.GetXLocation(), riderScript.GetYLocation());
         riderTrail.Insert(0, trail); //add it to the start of the trail list
         tileArray[riderScript.GetXLocation(), riderScript.GetYLocation()].GetComponent<TileScript>().AddObject(trail); //adds the trail node object to the list of objects for the tile it is currently on
+        
     }
 
     /* MoveTrail:
@@ -73,6 +78,7 @@ public class TrailManagerScript : MonoBehaviour
         Vector3 temp = riderTrail[0].transform.position; //storing the location of the first piece of trail
         tileArray[(int)riderTrail[0].transform.position.x, (int)riderTrail[0].transform.position.y].GetComponent<TileScript>().RemoveObject(riderTrail[0]);//removing the trail node from it's old tile's object list
         riderTrail[0].transform.position = new Vector3(riderScript.GetXLocation(), riderScript.GetYLocation(),0); //moving the trail node to the riders location (before the rider has moved
+        riderTrail[0].GetComponent<TrailScript>().setLocation(riderScript.GetXLocation(), riderScript.GetYLocation());//Udating the Trails position
         tileArray[riderScript.GetXLocation(), riderScript.GetYLocation()].GetComponent<TileScript>().AddObject(riderTrail[0]);//adding the trail to the new tile's object list
 
         for (int i = 1; i < riderTrail.Count; i++) //shift every other piece of trail up to the next spot 
@@ -80,6 +86,7 @@ public class TrailManagerScript : MonoBehaviour
             Vector3 temp2 = riderTrail[i].transform.position; //storing the position a trail piece
             tileArray[(int)riderTrail[i].transform.position.x, (int)riderTrail[i].transform.position.y].GetComponent<TileScript>().RemoveObject(riderTrail[i]);//removing the trail node from it's old tile's object list
             riderTrail[i].transform.position = temp;//moving the trail node to it's predecessors locations 
+            riderTrail[i].GetComponent<TrailScript>().setLocation((int)riderTrail[i].transform.position.x, (int)riderTrail[i].transform.position.y);//Udating the Trails position
             tileArray[(int)riderTrail[i].transform.position.x, (int)riderTrail[i].transform.position.y].GetComponent<TileScript>().AddObject(riderTrail[i]);//adding the trail to the new tile's object list
             temp = temp2; //converting the temps for the next cycle
         }
